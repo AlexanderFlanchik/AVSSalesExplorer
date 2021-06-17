@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using AVSSalesExplorer.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace AVSSalesExplorer
         public App()
         {
             host = new HostBuilder().ConfigureServices((services) => {
+                services.AddSingleton<MainWindowViewModel>();
                 services.AddSingleton<MainWindow>();
             }).Build();
         }

@@ -1,5 +1,8 @@
-﻿using System;
+﻿using AVSSalesExplorer.Models;
+using AVSSalesExplorer.ViewModels;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,9 +23,30 @@ namespace AVSSalesExplorer
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        private readonly MainWindowViewModel vm;
+
+        public MainWindow(MainWindowViewModel viewModel)
         {
             InitializeComponent();
+            vm = viewModel;
+            DataContext = vm;
+            productGrid.Loaded += ProductGrid_Loaded;            
+        }
+
+        private async void ProductGrid_Loaded(object sender, RoutedEventArgs e)
+        {
+            await vm.LoadData();            
+        }
+
+        private void Edit_Click(object sender, RoutedEventArgs e)
+        {
+            var rowVm = ((Button)sender).DataContext as ItemViewModel;
+            MessageBox.Show($"Id = {rowVm.Id}, Описание: {rowVm.Description}");
+        }
+
+        private void Delete_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

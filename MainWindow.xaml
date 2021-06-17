@@ -4,8 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AVSSalesExplorer"
+        xmlns:models="clr-namespace:AVSSalesExplorer.Models"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="AVS Sales Explorer" Height="450" Width="800">
+        Title="AVS Sales Explorer" Height="768" Width="1366">
+    <Window.Resources>
+        <local:ByteArrayToBitmapImageConverter x:Key="byteToImageConverter"/>
+        <local:EnumDescriptionConverter x:Key="enumDescriptionConverter"/>
+        <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="models:ItemCategory"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -16,5 +27,56 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Grid.Column="0">Товары</Label>
+        <DataGrid Grid.Row="1" Grid.Column="0" x:Name="productGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Items}">
+            <DataGrid.Resources>
+                <Style x:Key="headerCellStyle" TargetType="TextBlock">
+                    <Setter Property="Margin" Value="0,5,5,5"/>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Width="120" Header="Товар">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <ItemContainerTemplate>
+                            <Image Width="100" Height="100" Source="{Binding Path=Photo, Converter={StaticResource byteToImageConverter}}"/>
+                        </ItemContainerTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn MinWidth="85" Header="Категория" Binding="{Binding Path=Category, Converter={ StaticResource enumDescriptionConverter }}" />
+                <DataGridTextColumn MinWidth="150" Header="Описание" Width="*" Binding="{Binding Path=Description}"></DataGridTextColumn>
+                <DataGridTemplateColumn Header="Размеры">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <ItemContainerTemplate>
+                            <ItemsControl ItemsSource="{Binding Sizes}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Columns="5"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Size}" Margin="0,0,5,5"></TextBlock>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ItemContainerTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Дата покупки" Binding="{Binding Path=PurchaseDate, StringFormat=dd/MM/yyyy}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Цена, грн."  MinWidth="75" Binding="{Binding Path=Price}"></DataGridTextColumn>
+                <DataGridHyperlinkColumn Header="Продажи" MinWidth="75" Binding="{Binding Path=SalesAmount}"></DataGridHyperlinkColumn>
+                <DataGridCheckBoxColumn Header="Наличие" Binding="{Binding Path=InStock}"></DataGridCheckBoxColumn>
+                <DataGridTextColumn Header="Комментарий" MinWidth="175" Width="*" Binding="{Binding Path=Comment}"></DataGridTextColumn>
+                <DataGridTemplateColumn Width="110">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Button Width="90" Height="20" Content="Редактировать" Margin="0,5,5,5" Click="Edit_Click"></Button>
+                                <Button Width="90" Height="20" Content="Удалить" Margin="0,0,5,5" Click="Delete_Click"></Button>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Window>

@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace AVSSalesExplorer.Models
 {
+    /// <summary>
+    /// Item category - clothes or bags
+    /// </summary>
     public enum ItemCategory
     {
+        [Description("Вещи")]
         Clothes,
+        
+        [Description("Сумки")]
         Bags
     }
 }
