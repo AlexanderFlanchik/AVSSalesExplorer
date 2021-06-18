@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace AVSSalesExplorer.Models
+namespace AVSSalesExplorer.Common
 {
     /// <summary>
     /// Item category - clothes or bags

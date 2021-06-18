@@ -1,4 +1,5 @@
-﻿using AVSSalesExplorer.Models;
+﻿using AVSSalesExplorer.Common;
+using AVSSalesExplorer.Models;
 using System;
 using System.Linq;
 
@@ -17,8 +18,8 @@ namespace AVSSalesExplorer.ViewModels
 
         public ItemSize[] Sizes { get; set; }
         public Sale[] Sales { get; set; }
-
-        public int? SalesAmount => Sales?.Count();
+        public ItemSize[] AvailableSizes => Sizes?.Where(s => s.InStock).ToArray() ?? Array.Empty<ItemSize>();
+        public int? SalesAmount => Sales?.Length;
 
         public static ItemViewModel MapFromItem(Item item) =>
             new ItemViewModel
@@ -31,8 +32,8 @@ namespace AVSSalesExplorer.ViewModels
                 Price = item.Price,
                 InStock = item.InStock,
                 Comment = item.Comment,
-                Sizes = item.Sizes,
-                Sales = item.Sales
+                Sizes = item.Sizes?.ToArray() ?? Array.Empty<ItemSize>(),
+                Sales = item.Sales?.ToArray() ?? Array.Empty<Sale>()
             };
     }
 }

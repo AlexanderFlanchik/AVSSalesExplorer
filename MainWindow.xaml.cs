@@ -34,19 +34,20 @@ namespace AVSSalesExplorer
         }
 
         private async void ProductGrid_Loaded(object sender, RoutedEventArgs e)
-        {
+        {            
             await vm.LoadData();            
         }
 
         private void Edit_Click(object sender, RoutedEventArgs e)
         {
+            // TODO: Show edit row dialog
             var rowVm = ((Button)sender).DataContext as ItemViewModel;
             MessageBox.Show($"Id = {rowVm.Id}, Описание: {rowVm.Description}");
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
-
-        }
+            // Show confirm & delete row with grid data update
+        }        
     }
 }

@@ -1,4 +1,5 @@
-﻿using AVSSalesExplorer.ViewModels;
+﻿using AVSSalesExplorer.Services;
+using AVSSalesExplorer.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -21,6 +22,8 @@ namespace AVSSalesExplorer
         public App()
         {
             host = new HostBuilder().ConfigureServices((services) => {
+                services.AddDbContext<ItemDbContext>();
+                services.AddTransient<IItemService, ItemService>();
                 services.AddSingleton<MainWindowViewModel>();
                 services.AddSingleton<MainWindow>();
             }).Build();
@@ -29,7 +32,9 @@ namespace AVSSalesExplorer
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            
+            var dbContext = host.Services.GetRequiredService<ItemDbContext>();
+            dbContext.Database.EnsureCreated();
+                        
             var mainWindow = host.Services.GetRequiredService<MainWindow>();
             mainWindow.Show();
         }

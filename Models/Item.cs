@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AVSSalesExplorer.Common;
+using System;
+using System.Collections.Generic;
 
 namespace AVSSalesExplorer.Models
 {
@@ -16,7 +18,7 @@ namespace AVSSalesExplorer.Models
         public bool InStock { get; set; }
         public string Comment { get; set; }
 
-        public virtual ItemSize[] Sizes { get; set; } // only for clothes
-        public virtual Sale[] Sales { get; set; }
+        public virtual ICollection<ItemSize> Sizes { get; set; } // only for clothes
+        public virtual ICollection<Sale> Sales { get; set; }
     }
 }
