@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AVSSalesExplorer"
-        xmlns:models="clr-namespace:AVSSalesExplorer.Models"
+        xmlns:common="clr-namespace:AVSSalesExplorer.Common"
         xmlns:System="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="AVS Sales Explorer" Height="768" Width="1366">
@@ -13,7 +13,7 @@
         <local:EnumDescriptionConverter x:Key="enumDescriptionConverter"/>
         <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="models:ItemCategory"/>
+                <x:Type TypeName="common:ItemCategory"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </Window.Resources>
@@ -26,7 +26,10 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" Grid.Column="0">Товары</Label>
+        <StackPanel Orientation="Horizontal">
+            <Label Grid.Row="0" Grid.Column="0" Margin="0,3">Товары</Label>
+            <Button x:Name="AddNewItem" Height="20" Width="95" Margin="5,0" Content="Новый товар.." Click="AddNewItem_Click"/>
+        </StackPanel>
         <DataGrid Grid.Row="1" Grid.Column="0" x:Name="productGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Items}">
             <DataGrid.Resources>
                 <Style x:Key="headerCellStyle" TargetType="TextBlock">

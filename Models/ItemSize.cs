@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace AVSSalesExplorer.Models
+﻿namespace AVSSalesExplorer.Models
 {
     public class ItemSize
     {

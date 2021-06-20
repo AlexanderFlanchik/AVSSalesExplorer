@@ -1,4 +1,5 @@
 ﻿using AVSSalesExplorer.Models;
+using AVSSalesExplorer.Pages;
 using AVSSalesExplorer.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -24,11 +25,14 @@ namespace AVSSalesExplorer
     public partial class MainWindow : Window
     {
         private readonly MainWindowViewModel vm;
-
-        public MainWindow(MainWindowViewModel viewModel)
+        private readonly EditItemViewModel editVm;
+        
+        public MainWindow(MainWindowViewModel viewModel, EditItemViewModel editItemViewModel)
         {
             InitializeComponent();
             vm = viewModel;
+            editVm = editItemViewModel;
+            
             DataContext = vm;
             productGrid.Loaded += ProductGrid_Loaded;            
         }
@@ -48,6 +52,18 @@ namespace AVSSalesExplorer
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
             // Show confirm & delete row with grid data update
-        }        
+        }
+
+        private async void AddNewItem_Click(object sender, RoutedEventArgs e)
+        {
+            editVm.NewItem();
+            var editItemDialog = new EditItemDialog(editVm);
+
+            var result = editItemDialog.ShowDialog();
+            if (result.HasValue && result.Value)
+            {
+                await vm.LoadData();
+            }
+        }
     }
 }

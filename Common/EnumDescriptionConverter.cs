@@ -7,7 +7,7 @@ namespace AVSSalesExplorer
 {
     public class EnumDescriptionConverter: IValueConverter
     {
-        private string GetEnumDescription(Enum enumObj)
+        private static string GetEnumDescription(Enum enumObj)
         {
             var fieldInfo = enumObj.GetType().GetField(enumObj.ToString());
             object[] attribArray = fieldInfo.GetCustomAttributes(false);

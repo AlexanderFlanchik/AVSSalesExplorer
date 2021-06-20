@@ -1,4 +1,5 @@
-﻿using AVSSalesExplorer.Services;
+﻿using AVSSalesExplorer.Pages;
+using AVSSalesExplorer.Services;
 using AVSSalesExplorer.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -22,10 +23,12 @@ namespace AVSSalesExplorer
         public App()
         {
             host = new HostBuilder().ConfigureServices((services) => {
+                services.AddSingleton<ImageResizeService>();
                 services.AddDbContext<ItemDbContext>();
                 services.AddTransient<IItemService, ItemService>();
                 services.AddSingleton<MainWindowViewModel>();
                 services.AddSingleton<MainWindow>();
+                services.AddSingleton<EditItemViewModel>();                                
             }).Build();
         }
 
