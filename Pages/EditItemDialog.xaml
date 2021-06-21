@@ -46,7 +46,7 @@
                 <TextBox x:Name="Description" Text="{Binding Description}" Width="600" Margin="5,0,5,0"/>
                 <StackPanel Orientation="Horizontal" Margin="10,5">
                     <TextBlock Text="Категория" Margin="0,2"/>
-                    <ComboBox Margin="5,0" 
+                    <ComboBox Margin="5,0" IsEnabled="{Binding IsNewItem}"
                               ItemsSource="{Binding Source={StaticResource dataFromEnum }}"
                               SelectedValue="{Binding Path=Category}">
                         <ComboBox.ItemTemplate>
@@ -56,18 +56,23 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="10,5">
+                <StackPanel Orientation="Horizontal" Margin="10,5" Visibility="{Binding SizesVisible}">
                     <TextBlock Text="Размеры" Margin="0,3" />
                     <Button Width="90" Height="20" Margin="10,0" Content="Добавить.." Click="NewSize_Click"/>
                 </StackPanel>
-                <Border BorderThickness="1" BorderBrush="Navy" Margin="5,0,5,0" Width="600">
-                    <StackPanel Orientation="Horizontal" Height="70" Margin="5,5,5,5">
+                <Border BorderThickness="1" BorderBrush="Navy" Margin="5,0,5,0" Width="600" Visibility="{Binding SizesVisible}">
+                    <StackPanel Height="70" Margin="5,5,5,5">
                         <ItemsControl ItemsSource="{Binding Sizes}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="{Binding Size}" Margin="5,0,5,0"/>
-                                        <Button Content="X" Click="RemoveSize_Click"/>
+                                        <Button Content="X" Width="20" Height="20" Click="RemoveSize_Click"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>

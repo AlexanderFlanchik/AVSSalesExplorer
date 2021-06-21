@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
+using System.Windows;
 using AVSSalesExplorer.Common;
 using AVSSalesExplorer.DTOs;
 using AVSSalesExplorer.Services;
@@ -29,6 +30,8 @@ namespace AVSSalesExplorer.ViewModels
         /// Item ID. Zero if item is new.
         /// </summary>
         public int Id { get; set; }
+
+        public bool IsNewItem => Id == 0;
 
         public string Description
         {
@@ -62,10 +65,20 @@ namespace AVSSalesExplorer.ViewModels
                 {
                     _category = value;
                     OnPropertyChanged(nameof(Category));
+                    OnPropertyChanged(nameof(SizesVisible));
                 }
             }
         }
         
+        public Visibility SizesVisible
+        {
+            get
+            {
+                return (Category != ItemCategory.Bags) ? Visibility.Visible : Visibility.Hidden;
+            }
+        }
+
+
         public DateTime PurchaseDate
         {
             get => _purchaseDate;
@@ -118,7 +131,7 @@ namespace AVSSalesExplorer.ViewModels
         public void NewItem()
         {
             Price = 0m;
-            Category = ItemCategory.Bags;  
+            Category = ItemCategory.Clothes;  
             Sizes = Array.Empty<ItemSizeRequest>();
             Photo = null;
             Description = null;

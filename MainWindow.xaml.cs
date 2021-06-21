@@ -1,21 +1,7 @@
-﻿using AVSSalesExplorer.Models;
-using AVSSalesExplorer.Pages;
+﻿using AVSSalesExplorer.Pages;
 using AVSSalesExplorer.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace AVSSalesExplorer
 {
@@ -27,11 +13,12 @@ namespace AVSSalesExplorer
         private readonly MainWindowViewModel vm;
         private readonly EditItemViewModel editVm;
         
-        public MainWindow(MainWindowViewModel viewModel, EditItemViewModel editItemViewModel)
+        public MainWindow()
         {
             InitializeComponent();
-            vm = viewModel;
-            editVm = editItemViewModel;
+            
+            vm = DependencyResolver.Instance.GetRequiredService<MainWindowViewModel>();
+            editVm = DependencyResolver.Instance.GetRequiredService<EditItemViewModel>();
             
             DataContext = vm;
             productGrid.Loaded += ProductGrid_Loaded;            
@@ -57,7 +44,7 @@ namespace AVSSalesExplorer
         private async void AddNewItem_Click(object sender, RoutedEventArgs e)
         {
             editVm.NewItem();
-            var editItemDialog = new EditItemDialog(editVm);
+            var editItemDialog = new EditItemDialog();
 
             var result = editItemDialog.ShowDialog();
             if (result.HasValue && result.Value)

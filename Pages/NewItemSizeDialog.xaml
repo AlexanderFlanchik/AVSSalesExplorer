@@ -1,0 +1,31 @@
+﻿<Window x:Class="AVSSalesExplorer.Pages.NewItemSizeDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AVSSalesExplorer.Pages"
+        mc:Ignorable="d"
+        Title="Новый размер" Height="100" Width="320" ResizeMode="NoResize">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="90"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+            <TextBlock  Text="Размер:" Margin="5,5"/>
+            <ComboBox x:Name="SizeValueCB" Width="90" Height="20" Margin="5,0" ItemsSource="{Binding AvailableSizes}" SelectedValue="{Binding Path=Size}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+            <TextBlock Text="Количество:" Margin="5,5" />
+            <TextBox x:Name="SizeAmountTB" Width="70" Height="20"/>
+        </StackPanel>
+        <StackPanel Grid.Row="0" Grid.RowSpan="3" Grid.Column="1">
+            <Button x:Name="OKBtn" Content="ОК" Width="80" Height="20" Click="OKBtn_Click" />
+            <Button x:Name="CancelBtn" Content="Отмена" Width="80" Height="20" Margin="0,5" IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

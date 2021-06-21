@@ -1,20 +1,14 @@
 ﻿using AVSSalesExplorer.ViewModels;
 using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using AVSSalesExplorer.Common;
+using System.Linq;
+using AVSSalesExplorer.DTOs;
 
 namespace AVSSalesExplorer.Pages
 {
@@ -24,35 +18,69 @@ namespace AVSSalesExplorer.Pages
     public partial class EditItemDialog : Window
     {
         private readonly EditItemViewModel vm;
+        private readonly NewItemSizeViewModel newItemSizeVm;
 
-        public EditItemDialog(EditItemViewModel viewModel)
+        public EditItemDialog()
         {
             InitializeComponent();
+            vm = DependencyResolver.Instance.GetRequiredService<EditItemViewModel>();
+            newItemSizeVm = DependencyResolver.Instance.GetRequiredService<NewItemSizeViewModel>();
 
-            vm = viewModel;
             DataContext = vm;
             Loaded += (s, e) => Title = vm.Id > 0 ? "Редактирование товара" : "Новый товар";            
         }
 
         private void RemoveSize_Click(object sender, RoutedEventArgs e)
         {
+            if (sender is not Button delBtn)
+            {
+                return;
+            }
 
+            var dc = (ItemSizeRequest)delBtn.DataContext;
+            var sizes = vm.Sizes.ToList();
+            
+            vm.Sizes = sizes.Except(new[] { dc }).OrderBy(s => s.Size).ToArray();
         }
 
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
-            Close();
+            DialogResult = true;    
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            
-            Close();
+        {            
+            DialogResult = false;
         }
 
         private void NewSize_Click(object sender, RoutedEventArgs e)
         {
+            var alreadyUsedSizes = vm.Sizes?.Select(s => s.Size).ToArray();
+            if (alreadyUsedSizes != null && alreadyUsedSizes.Any())
+            {
+                newItemSizeVm.AlreadyAddedSizes = alreadyUsedSizes;
+                if (!newItemSizeVm.AvailableSizes.Any())
+                {
+                    MessageBox.Show("Вы уже добавили все доступные размеры.", "Новый размер", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+            }
 
+            var newItemSizeDialog = new NewItemSizeDialog();
+            if (newItemSizeDialog.ShowDialog() == true)
+            {
+                var newItemSizeRequest = new ItemSizeRequest 
+                    { 
+                        InStock = true, 
+                        Size = newItemSizeVm.Size, 
+                        Amount = newItemSizeVm.Amount 
+                    };
+
+                var sizes = vm.Sizes.ToList();
+                sizes.Add(newItemSizeRequest);
+
+                vm.Sizes = sizes.ToArray();
+            }
         }
 
         private async void LoadPhotoBtn_Click(object sender, RoutedEventArgs e)
@@ -65,8 +93,7 @@ namespace AVSSalesExplorer.Pages
 
             try
             {
-                var showDialog = fileOpenDialog.ShowDialog();
-                if (showDialog.HasValue && showDialog.Value)
+                if (fileOpenDialog.ShowDialog() == true)
                 {
                     var fi = new FileInfo(fileOpenDialog.FileName);
                     if (!fi.Exists)
@@ -92,20 +119,6 @@ namespace AVSSalesExplorer.Pages
         }
 
         private void Price_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            var inpt = (sender as TextBox).Text;
-            
-            Regex regex;
-            if (inpt.Contains(".") || inpt.Contains(","))
-            {
-                regex = new Regex(@"[^0-9]+");
-            } 
-            else 
-            {
-                regex = new Regex(@"[^0-9.|,]+");
-            }
-            
-            e.Handled = regex.IsMatch(e.Text);
-        }
+            => this.GetDecimalNumberTextBoxValidationHandler().Invoke(sender, e);
     }
 }

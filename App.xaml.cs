@@ -19,17 +19,20 @@ namespace AVSSalesExplorer
     public partial class App : Application
     {
         private readonly IHost host;
-
+        
         public App()
         {
             host = new HostBuilder().ConfigureServices((services) => {
                 services.AddSingleton<ImageResizeService>();
                 services.AddDbContext<ItemDbContext>();
                 services.AddTransient<IItemService, ItemService>();
-                services.AddSingleton<MainWindowViewModel>();
-                services.AddSingleton<MainWindow>();
-                services.AddSingleton<EditItemViewModel>();                                
+                
+                services.AddSingleton<MainWindowViewModel>();                
+                services.AddSingleton<EditItemViewModel>();
+                services.AddSingleton<NewItemSizeViewModel>();
             }).Build();
+
+            DependencyResolver.Instance.Init(host);
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -38,7 +41,7 @@ namespace AVSSalesExplorer
             var dbContext = host.Services.GetRequiredService<ItemDbContext>();
             dbContext.Database.EnsureCreated();
                         
-            var mainWindow = host.Services.GetRequiredService<MainWindow>();
+            var mainWindow = new MainWindow();
             mainWindow.Show();
         }
 
