@@ -7,7 +7,7 @@
         xmlns:root="clr-namespace:AVSSalesExplorer"
         xmlns:common="clr-namespace:AVSSalesExplorer.Common"
         mc:Ignorable="d"
-        Title="EditItemDialog" Height="470" Width="835" ResizeMode="NoResize">
+        Title="EditItemDialog" Height="470" Width="835" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="SingleBorderWindow">
     <Window.Resources>
         <root:EnumDescriptionConverter x:Key="enumDescriptionConverter"/>
         <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
@@ -92,7 +92,8 @@
             <TextBox Text="{Binding Comment}" Height="70"/>
         </StackPanel>
         <StackPanel Grid.Row="3" Margin="0,5,0,-15" Orientation="Horizontal">
-            <Button Content="ОК" Width="55" Height="25" Margin="690,0,5,0" Click="OKButton_Click"></Button>
+            <TextBlock x:Name="validationErrorsMessage" Foreground="Red" Width="655" FontWeight="Bold" Margin="15,5"/>
+            <Button Content="ОК" Width="55" Height="25" Margin="5,0,5,0" Click="OKButton_Click"></Button>
             <Button Content="Отмена" Width="60" Height="25" Click="CancelButton_Click"/>
         </StackPanel>
     </Grid>

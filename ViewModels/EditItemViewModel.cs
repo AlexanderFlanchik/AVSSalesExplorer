@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
@@ -9,10 +11,11 @@ using AVSSalesExplorer.Services;
 
 namespace AVSSalesExplorer.ViewModels
 {
-    public class EditItemViewModel : INotifyPropertyChanged
+    public class EditItemViewModel : INotifyPropertyChanged, IValidatableObject
     {
         private readonly ImageResizeService _imageResizeService;
-        
+        private readonly IItemService _itemService;
+
         private string _description;
         private byte[] _photo;
         private ItemCategory _category;
@@ -21,9 +24,10 @@ namespace AVSSalesExplorer.ViewModels
         private ItemSizeRequest[] _sizes;
         private string _comment;
         
-        public EditItemViewModel(ImageResizeService imageResizeService)
+        public EditItemViewModel(ImageResizeService imageResizeService, IItemService itemService)
         {
             _imageResizeService = imageResizeService;
+            _itemService = itemService;
         }
 
         /// <summary>
@@ -145,9 +149,34 @@ namespace AVSSalesExplorer.ViewModels
             Photo = await _imageResizeService.GetResizedImageStreamAsync(imageStream, fileExtension, maxWidth);
         }
 
+        public Task<int> AddNewItem(AddNewItemRequest request) => _itemService.CreateItem(request);
+        
         public event PropertyChangedEventHandler PropertyChanged;      
 
         private void OnPropertyChanged(string property)
            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (Photo == null || Photo.Length == 0)
+            {
+                yield return new ValidationResult("Фото не загружено");
+            }
+
+            if (string.IsNullOrEmpty(Description))
+            {
+                yield return new ValidationResult("Описание не указано");
+            }
+
+            if (Category != ItemCategory.Bags && (Sizes == null || Sizes.Length == 0))
+            {
+                yield return new ValidationResult("Добавьте хотя бы один размер");
+            }
+
+            if (Price == 0)
+            {
+                yield return new ValidationResult("Цена не указана");
+            }            
+        }
     }
 }

@@ -47,7 +47,14 @@ namespace AVSSalesExplorer.Services
                 PurchaseDate = DateTime.Now,
                 InStock = true,
                 Photo = request.Photo,
-                Sizes = request.Sizes?.Select(s => new ItemSize { InStock = s.InStock, Size = s.Size }).ToArray() ?? Array.Empty<ItemSize>(),
+                Sizes = request.Sizes?.Select(s => 
+                        new ItemSize 
+                            { 
+                                InStock = s.InStock, 
+                                Size = s.Size, 
+                                Amount = s.Amount 
+                            }
+                        ).ToArray() ?? Array.Empty<ItemSize>(),
                 Sales = Array.Empty<Sale>(),
                 Comment = request.Comment
             };

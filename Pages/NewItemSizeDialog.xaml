@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AVSSalesExplorer.Pages"
         mc:Ignorable="d"
-        Title="Новый размер" Height="100" Width="320" ResizeMode="NoResize">
+        Title="Новый размер" Height="100" Width="320" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="SingleBorderWindow">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
@@ -21,7 +21,7 @@
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
             <TextBlock Text="Количество:" Margin="5,5" />
-            <TextBox x:Name="SizeAmountTB" Width="70" Height="20"/>
+            <TextBox x:Name="SizeAmountTB" Width="70" Height="20" Text="{Binding Amount}"/>
         </StackPanel>
         <StackPanel Grid.Row="0" Grid.RowSpan="3" Grid.Column="1">
             <Button x:Name="OKBtn" Content="ОК" Width="80" Height="20" Click="OKBtn_Click" />

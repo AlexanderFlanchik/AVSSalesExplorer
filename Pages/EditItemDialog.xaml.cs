@@ -2,13 +2,15 @@
 using Microsoft.Win32;
 using System;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using AVSSalesExplorer.Common;
 using System.Linq;
 using AVSSalesExplorer.DTOs;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using ModelValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
 
 namespace AVSSalesExplorer.Pages
 {
@@ -43,9 +45,35 @@ namespace AVSSalesExplorer.Pages
             vm.Sizes = sizes.Except(new[] { dc }).OrderBy(s => s.Size).ToArray();
         }
 
-        private void OKButton_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = true;    
+        private async void OKButton_Click(object sender, RoutedEventArgs e)
+        {            
+            var validationResults = new List<ModelValidationResult>();
+            var validationContext = new ValidationContext(vm);
+            validationErrorsMessage.Text = string.Empty;
+
+            if (Validator.TryValidateObject(vm, validationContext, validationResults))
+            {
+                // all OK
+                var newAddnewItemRequest = new AddNewItemRequest
+                {
+                    Description = vm.Description,
+                    Photo = vm.Photo,
+                    Category = vm.Category,
+                    Price = vm.Price,
+                    PurchaseDate = vm.PurchaseDate,
+                    Sizes = vm.Sizes,
+                    Comment = vm.Comment
+                };
+
+                await vm.AddNewItem(newAddnewItemRequest);
+
+                DialogResult = true;
+            }
+            else
+            {                
+                // Errors
+                validationErrorsMessage.Text = string.Join(". ", validationResults.Select(c => c.ErrorMessage).ToArray());                    
+            }
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
@@ -54,17 +82,24 @@ namespace AVSSalesExplorer.Pages
         }
 
         private void NewSize_Click(object sender, RoutedEventArgs e)
-        {
+        {                
             var alreadyUsedSizes = vm.Sizes?.Select(s => s.Size).ToArray();
             if (alreadyUsedSizes != null && alreadyUsedSizes.Any())
             {
                 newItemSizeVm.AlreadyAddedSizes = alreadyUsedSizes;
-                if (!newItemSizeVm.AvailableSizes.Any())
+                if (!newItemSizeVm.AvailableSizes.Any())                                
                 {
                     MessageBox.Show("Вы уже добавили все доступные размеры.", "Новый размер", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
             }
+
+            if (newItemSizeVm.AvailableSizes.Any())
+            {
+                newItemSizeVm.Size = newItemSizeVm.AvailableSizes.FirstOrDefault();
+            }
+            
+            newItemSizeVm.Amount = 1;
 
             var newItemSizeDialog = new NewItemSizeDialog();
             if (newItemSizeDialog.ShowDialog() == true)

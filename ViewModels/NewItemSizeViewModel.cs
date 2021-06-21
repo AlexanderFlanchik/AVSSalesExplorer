@@ -14,9 +14,9 @@ namespace AVSSalesExplorer.ViewModels
 
         private ushort _size;
         private ushort _amount;
-        
-        public ushort[] AlreadyAddedSizes { get; set; } = Array.Empty<ushort>();
 
+        public ushort[] AlreadyAddedSizes { get; set; } = Array.Empty<ushort>();
+        
         public ushort[] AvailableSizes
         {
             get
