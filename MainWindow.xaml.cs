@@ -1,4 +1,5 @@
-﻿using AVSSalesExplorer.Models;
+﻿using AVSSalesExplorer.DTOs;
+using AVSSalesExplorer.Models;
 using AVSSalesExplorer.Pages;
 using AVSSalesExplorer.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
@@ -46,9 +47,33 @@ namespace AVSSalesExplorer
 
         private void Edit_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Show edit row dialog
             var rowVm = ((Button)sender).DataContext as ItemViewModel;
-            MessageBox.Show($"Id = {rowVm.Id}, Описание: {rowVm.Description}");
+            var updateItemRequest = new UpdateItemRequest 
+                { 
+                    Id = rowVm.Id,
+                    Price = rowVm.Price,
+                    Category = rowVm.Category,
+                    Description = rowVm.Description,
+                    Photo = rowVm.Photo,
+                    PurchaseDate = rowVm.PurchaseDate,
+                    Comment = rowVm.Comment,
+                    Sizes = rowVm.Sizes.ToArray()
+                };
+
+            editVm.SetItemData(updateItemRequest);
+
+            EditItemDialog editItemDialog = new();
+            if (editItemDialog.ShowDialog() == true)
+            {
+                rowVm.Description = editVm.Description;
+                rowVm.Sizes = new ObservableCollection<ItemSizeRequest>(editVm.Sizes);
+                rowVm.Price = editVm.Price;
+                rowVm.Photo = editVm.Photo;
+                rowVm.PurchaseDate = editVm.PurchaseDate;
+                rowVm.Comment = editVm.Comment;
+                
+                ((Button)sender).DataContext = rowVm;
+            }
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)

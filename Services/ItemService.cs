@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using AVSSalesExplorer.DTOs;
 using AVSSalesExplorer.Models;
 using AVSSalesExplorer.ViewModels;
+using AVSSalesExplorer.Common;
 
 namespace AVSSalesExplorer.Services
 {
@@ -12,6 +13,7 @@ namespace AVSSalesExplorer.Services
     {
         Task<GetItemsResponse> GetItems(GetItemsRequest request);
         Task<int> CreateItem(AddNewItemRequest request);
+        Task UpdateItem(UpdateItemRequest request);
     }
 
     public class ItemService : IItemService
@@ -63,6 +65,44 @@ namespace AVSSalesExplorer.Services
             await itemContext.SaveChangesAsync();
 
             return newItem.Id;            
+        }
+
+        public async Task UpdateItem(UpdateItemRequest request)
+        {
+            var itemToUpdate = await itemContext.Items.Include(i => i.Sizes).FirstOrDefaultAsync(i => i.Id == request.Id);
+            if (itemToUpdate is null)
+            {
+                return;
+            }
+
+            // Category cannot be changed for an existing item
+            itemToUpdate.Price = request.Price;
+            itemToUpdate.Photo = request.Photo;
+            itemToUpdate.Description = request.Description;
+            itemToUpdate.PurchaseDate = request.PurchaseDate;
+            itemToUpdate.Comment = request.Comment;
+
+            if (itemToUpdate.Category != ItemCategory.Bags)
+            {
+                var requestSizes = request.Sizes.Where(s => s.ItemSizeId != 0)
+                        .Select(i => i.Size)
+                        .ToArray();
+
+                var newSizes = request.Sizes.Where(s => s.ItemSizeId == 0).ToArray();
+                var sizesToDelete = itemToUpdate.Sizes.Where(s => !requestSizes.Contains(s.Size)).ToList();
+
+                foreach (var s in sizesToDelete)
+                {
+                    itemToUpdate.Sizes.Remove(s);
+                }
+
+                foreach (var ns in newSizes)
+                {
+                    itemToUpdate.Sizes.Add(new ItemSize { InStock = true, Size = ns.Size, Amount = ns.Amount });
+                }
+            }
+            
+            await itemContext.SaveChangesAsync();
         }
     }
 }

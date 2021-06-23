@@ -144,13 +144,27 @@ namespace AVSSalesExplorer.ViewModels
             PurchaseDate = DateTime.Now;
         }
 
+        public void SetItemData(UpdateItemRequest updateItem)
+        {
+            Id = updateItem.Id;
+            Price = updateItem.Price;
+            Category = updateItem.Category;
+            Photo = updateItem.Photo;
+            Description = updateItem.Description;
+            PurchaseDate = updateItem.PurchaseDate;
+            Comment = updateItem.Comment;
+            Sizes = updateItem.Sizes;
+        }
+
         public async Task LoadAndResizePhoto(Stream imageStream, string fileExtension, int maxWidth)
         {
             Photo = await _imageResizeService.GetResizedImageStreamAsync(imageStream, fileExtension, maxWidth);
         }
 
         public Task<int> AddNewItem(AddNewItemRequest request) => _itemService.CreateItem(request);
-        
+
+        public Task UpdateItem(UpdateItemRequest request) => _itemService.UpdateItem(request);
+            
         public event PropertyChangedEventHandler PropertyChanged;      
 
         private void OnPropertyChanged(string property)
@@ -168,7 +182,7 @@ namespace AVSSalesExplorer.ViewModels
                 yield return new ValidationResult("Описание не указано");
             }
 
-            if (Category != ItemCategory.Bags && (Sizes == null || Sizes.Length == 0))
+            if (Id == 0 && Category != ItemCategory.Bags && (Sizes == null || Sizes.Length == 0))
             {
                 yield return new ValidationResult("Добавьте хотя бы один размер");
             }

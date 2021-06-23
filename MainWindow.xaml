@@ -49,7 +49,7 @@
                 <DataGridTemplateColumn Header="Размеры">
                     <DataGridTemplateColumn.CellTemplate>
                         <ItemContainerTemplate>
-                            <ItemsControl ItemsSource="{Binding AvailableSizes}">
+                            <ItemsControl ItemsSource="{Binding Sizes}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <UniformGrid Columns="5"/>

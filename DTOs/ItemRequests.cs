@@ -17,6 +17,7 @@ namespace AVSSalesExplorer.DTOs
 
     public class ItemSizeRequest
     {        
+        public int ItemSizeId { get; set; }
         public ushort Size { get; set; }
         public bool InStock { get; set; }
         public ushort Amount { get; set; }

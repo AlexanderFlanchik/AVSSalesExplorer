@@ -50,22 +50,24 @@ namespace AVSSalesExplorer.Pages
             var validationResults = new List<ModelValidationResult>();
             var validationContext = new ValidationContext(vm);
             validationErrorsMessage.Text = string.Empty;
-
+                       
             if (Validator.TryValidateObject(vm, validationContext, validationResults))
             {
                 // all OK
-                var newAddnewItemRequest = new AddNewItemRequest
+                if (vm.IsNewItem) // Create
                 {
-                    Description = vm.Description,
-                    Photo = vm.Photo,
-                    Category = vm.Category,
-                    Price = vm.Price,
-                    PurchaseDate = vm.PurchaseDate,
-                    Sizes = vm.Sizes,
-                    Comment = vm.Comment
-                };
+                    var newAddnewItemRequest = new AddNewItemRequest();
+                    FillItemRequestData(newAddnewItemRequest);
 
-                await vm.AddNewItem(newAddnewItemRequest);
+                    await vm.AddNewItem(newAddnewItemRequest);
+                }
+                else // Update
+                {
+                    var updateItemRequest = new UpdateItemRequest { Id = vm.Id };
+                    FillItemRequestData(updateItemRequest);
+
+                    await vm.UpdateItem(updateItemRequest);
+                }
 
                 DialogResult = true;
             }
@@ -73,6 +75,16 @@ namespace AVSSalesExplorer.Pages
             {                
                 // Errors
                 validationErrorsMessage.Text = string.Join(". ", validationResults.Select(c => c.ErrorMessage).ToArray());                    
+            }
+
+            void FillItemRequestData(ItemRequest request)
+            {
+                request.Description = vm.Description;
+                request.Photo = vm.Photo;
+                request.Price = vm.Price;
+                request.PurchaseDate = vm.PurchaseDate;
+                request.Comment = vm.Comment;
+                request.Sizes = vm.Sizes;
             }
         }
 
