@@ -68,7 +68,9 @@ namespace AVSSalesExplorer.ViewModels
             
             Items = itemsResponse.Items.ToList();                        
         }
-
+        
+        public Task DeleteItemById(int itemId) => _itemService.DeleteItem(itemId);
+        
         private void OnPropertyChanged(string property) 
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));        
     }

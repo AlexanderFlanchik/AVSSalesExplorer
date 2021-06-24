@@ -1,23 +1,10 @@
 ﻿using AVSSalesExplorer.DTOs;
-using AVSSalesExplorer.Models;
 using AVSSalesExplorer.Pages;
 using AVSSalesExplorer.ViewModels;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace AVSSalesExplorer
 {
@@ -76,9 +63,17 @@ namespace AVSSalesExplorer
             }
         }
 
-        private void Delete_Click(object sender, RoutedEventArgs e)
+        private async void Delete_Click(object sender, RoutedEventArgs e)
         {
             // Show confirm & delete row with grid data update
+            var rowVm = ((Button)sender).DataContext as ItemViewModel;
+            if (MessageBox.Show($"Вы действительно хотите удалить {rowVm.Description}? Данные о размерах и продажах тоже будут удалены.", "Удаление", 
+                MessageBoxButton.OKCancel, 
+                MessageBoxImage.Warning) == MessageBoxResult.OK)
+            {
+                await vm.DeleteItemById(rowVm.Id);
+                await vm.LoadData();
+            }
         }
 
         private async void AddNewItem_Click(object sender, RoutedEventArgs e)

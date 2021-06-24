@@ -19,6 +19,7 @@ namespace AVSSalesExplorer.Services
             = new Dictionary<string, string>()
             {
                 ["png"] = "image/png",
+                ["jpeg"] = "image/jpeg",
                 ["jpg"] = "image/jpeg",
                 ["bmp"] = "image/bmp",
                 ["gif"] = "image/gif"                

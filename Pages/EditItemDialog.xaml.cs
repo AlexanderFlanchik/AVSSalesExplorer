@@ -135,7 +135,7 @@ namespace AVSSalesExplorer.Pages
             var fileOpenDialog = new OpenFileDialog
             {
                 Title = "Выберите изображение",
-                Filter = "Изображения(*.bmp;*.jpg;*.gif;*.png)|*.BMP;*.JPG;*.GIF;*.PNG"
+                Filter = "Изображения(*.bmp;*.jpg;*.jpeg;*.gif;*.png)|*.BMP;*.JPG;*.JPEG;*.GIF;*.PNG"
             };
 
             try

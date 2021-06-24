@@ -14,6 +14,7 @@ namespace AVSSalesExplorer.Services
         Task<GetItemsResponse> GetItems(GetItemsRequest request);
         Task<int> CreateItem(AddNewItemRequest request);
         Task UpdateItem(UpdateItemRequest request);
+        Task DeleteItem(int itemId);
     }
 
     public class ItemService : IItemService
@@ -102,6 +103,18 @@ namespace AVSSalesExplorer.Services
                 }
             }
             
+            await itemContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteItem(int itemId)
+        {
+            var item = await itemContext.Items.FirstOrDefaultAsync(i => i.Id == itemId);
+            if (item is null)
+            {
+                return;
+            }
+
+            itemContext.Items.Remove(item);
             await itemContext.SaveChangesAsync();
         }
     }
