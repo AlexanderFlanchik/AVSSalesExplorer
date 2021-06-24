@@ -30,6 +30,7 @@ namespace AVSSalesExplorer
                 services.AddSingleton<MainWindowViewModel>();                
                 services.AddSingleton<EditItemViewModel>();
                 services.AddSingleton<NewItemSizeViewModel>();
+                services.AddSingleton<NewSaleViewModel>();
             }).Build();
 
             DependencyResolver.Instance.Init(host);

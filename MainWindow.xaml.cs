@@ -87,5 +87,11 @@ namespace AVSSalesExplorer
                 await vm.LoadData();
             }
         }
+
+        private void NewSale_Click(object sender, RoutedEventArgs e)
+        {
+            var newSaleDlg = new NewSaleDialog();
+            newSaleDlg.ShowDialog();
+        }
     }
 }

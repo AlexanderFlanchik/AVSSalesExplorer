@@ -75,7 +75,7 @@
                             <StackPanel>
                                 <Button Width="90" Height="20" Content="Редактировать" Margin="0,5,5,5" Click="Edit_Click"></Button>
                                 <Button Width="90" Height="20" Content="Удалить" Margin="0,0,5,5" Click="Delete_Click"></Button>
-                                <Button Width="90" Height="20" Content="Новая продажа.." Margin="0,0,5,5"></Button>
+                                <Button Width="90" Height="20" Content="Новая продажа.." Margin="0,0,5,5" Click="NewSale_Click"></Button>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
