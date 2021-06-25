@@ -1,20 +1,22 @@
-﻿using System;
+﻿using AVSSalesExplorer.Common;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using System.Windows;
 
 namespace AVSSalesExplorer.ViewModels
 {
-    public class NewSaleViewModel : INotifyPropertyChanged
+    public class NewSaleViewModel : INotifyPropertyChanged, IValidatableObject
     {
         private string _customer;
         private decimal _price;
         private ushort _size;
         private string _address;
         private string _phone;
+        
+        public  ItemCategory Category { get; set; }
 
+        public Visibility SizesVisibility => Category != ItemCategory.Bags ? Visibility.Visible : Visibility.Hidden;
         public byte[] Photo { get; set; }
         public string Description { get; set; }
 
@@ -86,6 +88,11 @@ namespace AVSSalesExplorer.ViewModels
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            yield break;
+        }
 
         private void OnPropertyChanged(string property)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));

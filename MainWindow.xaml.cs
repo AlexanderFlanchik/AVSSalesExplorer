@@ -1,4 +1,5 @@
-﻿using AVSSalesExplorer.DTOs;
+﻿using AVSSalesExplorer.Common;
+using AVSSalesExplorer.DTOs;
 using AVSSalesExplorer.Pages;
 using AVSSalesExplorer.ViewModels;
 using System.Collections.ObjectModel;
@@ -15,14 +16,16 @@ namespace AVSSalesExplorer
     {
         private readonly MainWindowViewModel vm;
         private readonly EditItemViewModel editVm;
-        
+        private readonly NewSaleViewModel newSaleVm;
+
         public MainWindow()
         {
             InitializeComponent();
             
             vm = DependencyResolver.Instance.GetRequiredService<MainWindowViewModel>();
             editVm = DependencyResolver.Instance.GetRequiredService<EditItemViewModel>();
-            
+            newSaleVm = DependencyResolver.Instance.GetRequiredService<NewSaleViewModel>();
+
             DataContext = vm;
             productGrid.Loaded += ProductGrid_Loaded;            
         }
@@ -34,7 +37,7 @@ namespace AVSSalesExplorer
 
         private void Edit_Click(object sender, RoutedEventArgs e)
         {
-            var rowVm = ((Button)sender).DataContext as ItemViewModel;
+            var rowVm = GetRowModel(sender);
             var updateItemRequest = new UpdateItemRequest 
                 { 
                     Id = rowVm.Id,
@@ -66,7 +69,7 @@ namespace AVSSalesExplorer
         private async void Delete_Click(object sender, RoutedEventArgs e)
         {
             // Show confirm & delete row with grid data update
-            var rowVm = ((Button)sender).DataContext as ItemViewModel;
+            var rowVm = GetRowModel(sender);
             if (MessageBox.Show($"Вы действительно хотите удалить {rowVm.Description}? Данные о размерах и продажах тоже будут удалены.", "Удаление", 
                 MessageBoxButton.OKCancel, 
                 MessageBoxImage.Warning) == MessageBoxResult.OK)
@@ -90,8 +93,24 @@ namespace AVSSalesExplorer
 
         private void NewSale_Click(object sender, RoutedEventArgs e)
         {
+            var rowVm = GetRowModel(sender);
+            newSaleVm.Photo = rowVm.Photo;
+            newSaleVm.Description = rowVm.Description;
+            newSaleVm.Category = rowVm.Category;
+
+            if (newSaleVm.Category != ItemCategory.Bags)
+            {
+                newSaleVm.Sizes = rowVm.Sizes.Select(s => s.Size).ToArray();
+            }
+
             var newSaleDlg = new NewSaleDialog();
-            newSaleDlg.ShowDialog();
+            if (newSaleDlg.ShowDialog() == true)
+            {
+                // Update sales value
+            }
         }
+
+        private ItemViewModel GetRowModel(object sender)
+            => ((FrameworkElement)sender).DataContext as ItemViewModel;
     }
 }
