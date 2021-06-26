@@ -1,6 +1,7 @@
 ﻿using AVSSalesExplorer.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using ModelValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
 
 namespace AVSSalesExplorer.Pages
 {
@@ -31,11 +33,18 @@ namespace AVSSalesExplorer.Pages
 
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = true;
+            var validationContext = new ValidationContext(vm);
+            var validationResults = new List<ModelValidationResult>();
+            
+            if (Validator.TryValidateObject(vm, validationContext, validationResults))
+            {
+                DialogResult = true;
+            }
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
+            vm.ClearValidationResults();
             DialogResult = false;
         }
     }

@@ -22,7 +22,9 @@ namespace AVSSalesExplorer.Services
 
         public async Task<int> CreateNewItemSale(NewItemSaleRequest request)
         {
-            var item = await _itemContext.Items.Include(i => i.Sales).Include(i => i.Sizes).FirstOrDefaultAsync();
+            var item = await _itemContext.Items.Include(i => i.Sales).Include(i => i.Sizes)
+                    .FirstOrDefaultAsync(it => it.Id == request.ItemId);
+
             if (item is null)
             {
                 return 0; // means unsuccessfull sale
@@ -40,7 +42,7 @@ namespace AVSSalesExplorer.Services
             }
             else
             {
-                return 0;
+                return 0;   // Cannot sale because the item size is out of stock.
             }
 
             var sale = new Sale()

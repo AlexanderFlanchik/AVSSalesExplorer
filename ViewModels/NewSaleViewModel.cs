@@ -133,9 +133,7 @@ namespace AVSSalesExplorer.ViewModels
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            PriceNotSet = false;
-            CustomerIsEmpty = false;
-            AddressIsEmpty = false;
+            ClearValidationResults();
 
             if (Price == 0)
             {
@@ -154,6 +152,13 @@ namespace AVSSalesExplorer.ViewModels
                 AddressIsEmpty = true;
                 yield return new ValidationResult(nameof(Address));
             }
+        }
+
+        public void ClearValidationResults()
+        {
+            PriceNotSet = false;
+            CustomerIsEmpty = false;
+            AddressIsEmpty = false;
         }
 
         private void OnPropertyChanged(string property)
