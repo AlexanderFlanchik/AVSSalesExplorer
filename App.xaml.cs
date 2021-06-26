@@ -26,7 +26,8 @@ namespace AVSSalesExplorer
                 services.AddSingleton<ImageResizeService>();
                 services.AddDbContext<ItemDbContext>();
                 services.AddTransient<IItemService, ItemService>();
-                
+                services.AddTransient<IItemSaleService, ItemSaleService>();
+
                 services.AddSingleton<MainWindowViewModel>();                
                 services.AddSingleton<EditItemViewModel>();
                 services.AddSingleton<NewItemSizeViewModel>();

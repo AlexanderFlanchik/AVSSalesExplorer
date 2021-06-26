@@ -52,8 +52,7 @@ namespace AVSSalesExplorer.Services
                 Photo = request.Photo,
                 Sizes = request.Sizes?.Select(s => 
                         new ItemSize 
-                            { 
-                                InStock = s.InStock, 
+                            {                                 
                                 Size = s.Size, 
                                 Amount = s.Amount 
                             }
@@ -99,7 +98,7 @@ namespace AVSSalesExplorer.Services
 
                 foreach (var ns in newSizes)
                 {
-                    itemToUpdate.Sizes.Add(new ItemSize { InStock = true, Size = ns.Size, Amount = ns.Amount });
+                    itemToUpdate.Sizes.Add(new ItemSize { Size = ns.Size, Amount = ns.Amount });
                 }
             }
             

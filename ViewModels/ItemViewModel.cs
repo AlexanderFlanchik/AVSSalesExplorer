@@ -91,11 +91,12 @@ namespace AVSSalesExplorer.ViewModels
             {
                 _sizes = value;
                 OnPropertyChanged(nameof(Sizes));
+                OnPropertyChanged(nameof(AvailableSizes));
             }
         }
 
         public Sale[] Sales { get; set; }
-        public ItemSizeRequest[] AvailableSizes => Sizes?.Where(s => s.InStock).ToArray() ?? Array.Empty<ItemSizeRequest>();
+        public ItemSizeRequest[] AvailableSizes => Sizes?.Where(s => s.Amount > 0).ToArray() ?? Array.Empty<ItemSizeRequest>();
         public int? SalesAmount => Sales?.Length;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -116,8 +117,7 @@ namespace AVSSalesExplorer.ViewModels
                             { 
                                 ItemSizeId = s.Id, 
                                 Amount = s.Amount, 
-                                Size = s.Size, 
-                                InStock = s.InStock 
+                                Size = s.Size,                                 
                             }).ToArray() ?? Array.Empty<ItemSizeRequest>()),
                 Sales = item.Sales?.ToArray() ?? Array.Empty<Sale>()
             };

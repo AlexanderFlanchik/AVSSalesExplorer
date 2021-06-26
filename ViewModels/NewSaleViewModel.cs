@@ -13,7 +13,10 @@ namespace AVSSalesExplorer.ViewModels
         private ushort _size;
         private string _address;
         private string _phone;
-        
+        private bool _priceNotSet;
+        private bool _customerIsEmpty;
+        private bool _addressIsEmpty;
+
         public  ItemCategory Category { get; set; }
 
         public Visibility SizesVisibility => Category != ItemCategory.Bags ? Visibility.Visible : Visibility.Hidden;
@@ -86,12 +89,71 @@ namespace AVSSalesExplorer.ViewModels
                 }
             }
         }
+    
+        public bool PriceNotSet
+        { 
+            get => _priceNotSet; 
+            set
+            {
+                if (value != _priceNotSet)
+                {
+                    _priceNotSet = value;
+                    OnPropertyChanged(nameof(PriceNotSet));
+                }
+            }
+        }
+
+        public bool CustomerIsEmpty 
+        { 
+            get => _customerIsEmpty;
+            set 
+            { 
+                if (value != _customerIsEmpty)
+                {
+                    _customerIsEmpty = value;
+                    OnPropertyChanged(nameof(CustomerIsEmpty));
+                }
+            } 
+        }
+
+        public bool AddressIsEmpty
+        {
+            get => _addressIsEmpty;
+            set
+            {
+                if (value != _addressIsEmpty)
+                {
+                    _addressIsEmpty = value;
+                    OnPropertyChanged(nameof(AddressIsEmpty));
+                }
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            yield break;
+            PriceNotSet = false;
+            CustomerIsEmpty = false;
+            AddressIsEmpty = false;
+
+            if (Price == 0)
+            {
+                PriceNotSet = true;
+                yield return new ValidationResult(nameof(Price));
+            }
+
+            if (string.IsNullOrEmpty(Customer))
+            {
+                CustomerIsEmpty = true;
+                yield return new ValidationResult(nameof(CustomerIsEmpty));
+            }
+            
+            if (string.IsNullOrEmpty(Address))
+            {
+                AddressIsEmpty = true;
+                yield return new ValidationResult(nameof(Address));
+            }
         }
 
         private void OnPropertyChanged(string property)

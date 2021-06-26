@@ -117,8 +117,7 @@ namespace AVSSalesExplorer.Pages
             if (newItemSizeDialog.ShowDialog() == true)
             {
                 var newItemSizeRequest = new ItemSizeRequest 
-                    { 
-                        InStock = true, 
+                    {                         
                         Size = newItemSizeVm.Size, 
                         Amount = newItemSizeVm.Amount 
                     };
