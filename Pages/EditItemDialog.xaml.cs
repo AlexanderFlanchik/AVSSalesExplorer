@@ -111,6 +111,10 @@ namespace AVSSalesExplorer.Pages
                     return;
                 }
             }
+            else
+            {
+                newItemSizeVm.AlreadyAddedSizes = Array.Empty<ushort>();
+            }
 
             if (newItemSizeVm.AvailableSizes.Any())
             {
