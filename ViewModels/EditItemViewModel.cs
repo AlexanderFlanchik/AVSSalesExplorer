@@ -11,7 +11,7 @@ using AVSSalesExplorer.Services;
 
 namespace AVSSalesExplorer.ViewModels
 {
-    public class EditItemViewModel : INotifyPropertyChanged, IValidatableObject
+    public class EditItemViewModel : ViewModelBase, IValidatableObject
     {
         private readonly ImageResizeService _imageResizeService;
         private readonly IItemService _itemService;
@@ -23,7 +23,8 @@ namespace AVSSalesExplorer.ViewModels
         private decimal _price;
         private ItemSizeRequest[] _sizes;
         private string _comment;
-        
+        private bool _inStock = true;
+
         public EditItemViewModel(ImageResizeService imageResizeService, IItemService itemService)
         {
             _imageResizeService = imageResizeService;
@@ -36,6 +37,20 @@ namespace AVSSalesExplorer.ViewModels
         public int Id { get; set; }
 
         public bool IsNewItem => Id == 0;
+        public bool InStockEnabled => !IsNewItem;
+
+        public bool InStock
+        {
+            get => _inStock;
+            set
+            {
+                if (value != _inStock)
+                {
+                    _inStock = value;
+                    OnPropertyChanged(nameof(InStock));
+                }
+            }
+        }
 
         public string Description
         {
@@ -70,18 +85,14 @@ namespace AVSSalesExplorer.ViewModels
                     _category = value;
                     OnPropertyChanged(nameof(Category));
                     OnPropertyChanged(nameof(SizesVisible));
+                    OnPropertyChanged(nameof(InStockVisible));
                 }
             }
         }
-        
-        public Visibility SizesVisible
-        {
-            get
-            {
-                return (Category != ItemCategory.Bags) ? Visibility.Visible : Visibility.Hidden;
-            }
-        }
 
+        public bool SizesVisible => Category != ItemCategory.Bags;
+
+        public bool InStockVisible => !SizesVisible;
 
         public DateTime PurchaseDate
         {
@@ -154,6 +165,7 @@ namespace AVSSalesExplorer.ViewModels
             PurchaseDate = updateItem.PurchaseDate;
             Comment = updateItem.Comment;
             Sizes = updateItem.Sizes;
+            InStock = updateItem.InStock;
         }
 
         public async Task LoadAndResizePhoto(Stream imageStream, string fileExtension, int maxWidth)
@@ -164,12 +176,7 @@ namespace AVSSalesExplorer.ViewModels
         public Task<int> AddNewItem(AddNewItemRequest request) => _itemService.CreateItem(request);
 
         public Task UpdateItem(UpdateItemRequest request) => _itemService.UpdateItem(request);
-            
-        public event PropertyChangedEventHandler PropertyChanged;      
-
-        private void OnPropertyChanged(string property)
-           => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
-
+                           
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (Photo == null || Photo.Length == 0)

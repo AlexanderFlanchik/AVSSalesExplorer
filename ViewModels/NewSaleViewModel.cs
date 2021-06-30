@@ -2,14 +2,13 @@
 using AVSSalesExplorer.DTOs;
 using AVSSalesExplorer.Services;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using System.Windows;
 
 namespace AVSSalesExplorer.ViewModels
 {
-    public class NewSaleViewModel : INotifyPropertyChanged, IValidatableObject
+    public class NewSaleViewModel : ViewModelBase, IValidatableObject
     {
         private readonly IItemSaleService _itemSaleService;
 
@@ -140,8 +139,6 @@ namespace AVSSalesExplorer.ViewModels
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public Task<int> CreateNewSale(NewItemSaleRequest request) => _itemSaleService.CreateNewItemSale(request);
         
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -172,9 +169,6 @@ namespace AVSSalesExplorer.ViewModels
             PriceNotSet = false;
             CustomerIsEmpty = false;
             AddressIsEmpty = false;
-        }
-
-        private void OnPropertyChanged(string property)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
+        }     
     }
 }

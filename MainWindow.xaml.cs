@@ -47,7 +47,8 @@ namespace AVSSalesExplorer
                     Photo = rowVm.Photo,
                     PurchaseDate = rowVm.PurchaseDate,
                     Comment = rowVm.Comment,
-                    Sizes = rowVm.Sizes.ToArray()
+                    Sizes = rowVm.Sizes.ToArray(),
+                    InStock = rowVm.InStock
                 };
 
             editVm.SetItemData(updateItemRequest);
@@ -61,6 +62,7 @@ namespace AVSSalesExplorer
                 rowVm.Photo = editVm.Photo;
                 rowVm.PurchaseDate = editVm.PurchaseDate;
                 rowVm.Comment = editVm.Comment;
+                rowVm.InStock = editVm.InStock;
                 
                 ((Button)sender).DataContext = rowVm;
             }
@@ -91,7 +93,7 @@ namespace AVSSalesExplorer
             }
         }
 
-        private void NewSale_Click(object sender, RoutedEventArgs e)
+        private async void NewSale_Click(object sender, RoutedEventArgs e)
         {
             var rowVm = GetRowModel(sender);
             newSaleVm.ItemId = rowVm.Id;
@@ -120,6 +122,8 @@ namespace AVSSalesExplorer
 
                 if (newSaleVm.Category == ItemCategory.Bags)
                 {
+                    rowVm.InStock = false;
+                    await vm.UpdateItemInStock(rowVm.Id, false);
                     return;
                 }
 
@@ -131,7 +135,7 @@ namespace AVSSalesExplorer
                 }
 
                 sz.Amount--;
-                rowVm.Sizes = new ObservableCollection<ItemSizeRequest>(currenSizes);
+                rowVm.Sizes = new ObservableCollection<ItemSizeRequest>(currenSizes);                
             }
         }
 

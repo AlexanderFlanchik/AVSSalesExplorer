@@ -9,6 +9,7 @@
         mc:Ignorable="d"
         Title="EditItemDialog" Height="470" Width="835" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="SingleBorderWindow" ShowInTaskbar="False">
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <root:EnumDescriptionConverter x:Key="enumDescriptionConverter"/>
         <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
             <ObjectDataProvider.MethodParameters>
@@ -56,11 +57,11 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="10,5" Visibility="{Binding SizesVisible}">
+                <StackPanel Orientation="Horizontal" Margin="10,5" Visibility="{Binding SizesVisible, Converter={StaticResource BoolToVisibilityConverter}}">
                     <TextBlock Text="Размеры" Margin="0,3" />
                     <Button Width="90" Height="20" Margin="10,0" Content="Добавить.." Click="NewSize_Click"/>
                 </StackPanel>
-                <Border BorderThickness="1" BorderBrush="Navy" Margin="5,0,5,0" Width="600" Visibility="{Binding SizesVisible}">
+                <Border BorderThickness="1" BorderBrush="Navy" Margin="5,0,5,0" Width="600" Visibility="{Binding SizesVisible, Converter={StaticResource BoolToVisibilityConverter}}">
                     <StackPanel Height="70" Margin="5,5,5,5">
                         <ItemsControl ItemsSource="{Binding Sizes}">
                             <ItemsControl.ItemsPanel>
@@ -79,6 +80,7 @@
                         </ItemsControl>
                     </StackPanel>
                 </Border>
+                <CheckBox Content="В наличии" IsEnabled="{Binding InStockEnabled}" IsChecked="{Binding InStock}" Margin="10,5,15,5" Visibility="{Binding InStockVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
             </StackPanel>
         </Grid>
         <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="1">

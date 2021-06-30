@@ -12,6 +12,7 @@ namespace AVSSalesExplorer.Services
     public interface IItemService
     {
         Task<GetItemsResponse> GetItems(GetItemsRequest request);
+        Task UpdateItemInStock(UpdateItemInStockRequest request);
         Task<int> CreateItem(AddNewItemRequest request);
         Task UpdateItem(UpdateItemRequest request);
         Task DeleteItem(int itemId);
@@ -100,6 +101,12 @@ namespace AVSSalesExplorer.Services
                 {
                     itemToUpdate.Sizes.Add(new ItemSize { Size = ns.Size, Amount = ns.Amount });
                 }
+
+                itemToUpdate.InStock = itemToUpdate.Sizes.Any(s => s.Amount > 0);
+            }
+            else
+            {
+                itemToUpdate.InStock = request.InStock;
             }
             
             await itemContext.SaveChangesAsync();
@@ -114,6 +121,19 @@ namespace AVSSalesExplorer.Services
             }
 
             itemContext.Items.Remove(item);
+            await itemContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateItemInStock(UpdateItemInStockRequest request)
+        {
+            var item = await itemContext.Items.FirstOrDefaultAsync(i => i.Id == request.Id);
+            if (item is null || item.Category != ItemCategory.Bags)
+            {
+                return;
+            }
+
+            item.InStock = request.InStock;
+
             await itemContext.SaveChangesAsync();
         }
     }

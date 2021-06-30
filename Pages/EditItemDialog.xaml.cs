@@ -64,6 +64,11 @@ namespace AVSSalesExplorer.Pages
                 else // Update
                 {
                     var updateItemRequest = new UpdateItemRequest { Id = vm.Id };
+                    if (vm.Category == ItemCategory.Bags)
+                    {
+                        updateItemRequest.InStock = vm.InStock;
+                    }
+
                     FillItemRequestData(updateItemRequest);
 
                     await vm.UpdateItem(updateItemRequest);
@@ -79,6 +84,7 @@ namespace AVSSalesExplorer.Pages
 
             void FillItemRequestData(ItemRequest request)
             {
+                request.Category = vm.Category;
                 request.Description = vm.Description;
                 request.Photo = vm.Photo;
                 request.Price = vm.Price;

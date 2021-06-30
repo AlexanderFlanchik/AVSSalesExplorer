@@ -1,4 +1,5 @@
-﻿using AVSSalesExplorer.DTOs;
+﻿using AVSSalesExplorer.Common;
+using AVSSalesExplorer.DTOs;
 using AVSSalesExplorer.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -30,21 +31,25 @@ namespace AVSSalesExplorer.Services
                 return 0; // means unsuccessfull sale
             }
 
-            var size = item.Sizes.FirstOrDefault(s => s.Size == request.Size);
-            if (size is null)
+            ItemSize size = null;
+            if (item.Category != ItemCategory.Bags)
             {
-                return 0;
-            }
+                size = item.Sizes.FirstOrDefault(s => s.Size == request.Size);
+                if (size is null)
+                {
+                    return 0;
+                }
 
-            if (size.Amount >= 1)
-            {
-                size.Amount--;
+                if (size.Amount >= 1)
+                {
+                    size.Amount--;
+                }
+                else
+                {
+                    return 0;   // Cannot sale because the item size is out of stock.
+                }
             }
-            else
-            {
-                return 0;   // Cannot sale because the item size is out of stock.
-            }
-
+            
             var sale = new Sale()
             {
                 Size = size,

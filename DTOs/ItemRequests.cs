@@ -28,5 +28,6 @@ namespace AVSSalesExplorer.DTOs
     public class UpdateItemRequest: ItemRequest
     {
         public int Id { get; set; }
+        public bool InStock { get; set; } // only used for bags
     }
 }

@@ -3,12 +3,11 @@ using AVSSalesExplorer.DTOs;
 using AVSSalesExplorer.Models;
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 
 namespace AVSSalesExplorer.ViewModels
 {
-    public class ItemViewModel : INotifyPropertyChanged
+    public class ItemViewModel : ViewModelBase
     {
         private decimal _price;
         private byte[] _photo;
@@ -111,9 +110,7 @@ namespace AVSSalesExplorer.ViewModels
         }
         public bool AreSales => Sales > 0;
         public ItemSizeRequest[] AvailableSizes => Sizes?.Where(s => s.Amount > 0).ToArray() ?? Array.Empty<ItemSizeRequest>();       
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
+      
         public static ItemViewModel MapFromItem(Item item) =>
             new ItemViewModel
             {
@@ -133,9 +130,6 @@ namespace AVSSalesExplorer.ViewModels
                                 Size = s.Size,                                 
                             }).ToArray() ?? Array.Empty<ItemSizeRequest>()),
                 Sales = item.Sales?.Count ?? 0
-            };
-
-        private void OnPropertyChanged(string property)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
+            };       
     }
 }

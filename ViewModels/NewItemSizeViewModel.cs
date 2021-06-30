@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AVSSalesExplorer.ViewModels
 {
-    public class NewItemSizeViewModel : INotifyPropertyChanged
+    public class NewItemSizeViewModel : ViewModelBase
     {
         private const ushort MIN_SIZE = 42;
         private const ushort MAX_SIZE = 62;
@@ -58,11 +55,6 @@ namespace AVSSalesExplorer.ViewModels
                     OnPropertyChanged(nameof(Amount));
                 }
             }
-        }
-        
-        public event PropertyChangedEventHandler PropertyChanged;
-                
-        private void OnPropertyChanged(string property)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
+        }             
     }
 }

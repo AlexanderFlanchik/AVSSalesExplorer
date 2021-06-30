@@ -1,16 +1,12 @@
-﻿using AVSSalesExplorer.Common;
-using AVSSalesExplorer.DTOs;
-using AVSSalesExplorer.Models;
+﻿using AVSSalesExplorer.DTOs;
 using AVSSalesExplorer.Services;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace AVSSalesExplorer.ViewModels
 {
-    public class MainWindowViewModel : INotifyPropertyChanged
+    public class MainWindowViewModel : ViewModelBase
     {
         private readonly IItemService _itemService;
 
@@ -58,9 +54,7 @@ namespace AVSSalesExplorer.ViewModels
                 }
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
+        
         public async Task LoadData()
         {           
             var itemsRequest = new GetItemsRequest() { PageNumber = 1, PageSize = 50 };
@@ -70,8 +64,7 @@ namespace AVSSalesExplorer.ViewModels
         }
         
         public Task DeleteItemById(int itemId) => _itemService.DeleteItem(itemId);
-        
-        private void OnPropertyChanged(string property) 
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));        
+
+        public Task UpdateItemInStock(int itemId, bool inStock) => _itemService.UpdateItemInStock(new UpdateItemInStockRequest { Id = itemId, InStock = inStock });               
     }
 }
