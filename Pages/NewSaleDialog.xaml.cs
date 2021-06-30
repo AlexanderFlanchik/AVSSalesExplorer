@@ -1,18 +1,10 @@
-﻿using AVSSalesExplorer.ViewModels;
+﻿using AVSSalesExplorer.Common;
+using AVSSalesExplorer.DTOs;
+using AVSSalesExplorer.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using ModelValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
 
 namespace AVSSalesExplorer.Pages
@@ -31,13 +23,30 @@ namespace AVSSalesExplorer.Pages
             DataContext = vm;
         }
 
-        private void OKButton_Click(object sender, RoutedEventArgs e)
+        private async void OKButton_Click(object sender, RoutedEventArgs e)
         {
             var validationContext = new ValidationContext(vm);
             var validationResults = new List<ModelValidationResult>();
             
             if (Validator.TryValidateObject(vm, validationContext, validationResults))
             {
+                var newSaleRequest = new NewItemSaleRequest() 
+                { 
+                    ItemId = vm.ItemId,
+                    Price = vm.Price,
+                    Address = vm.Address,
+                    Phone = vm.Phone,
+                    Customer = vm.Customer,
+                    SaleDate = DateTime.Now
+                };
+
+                if (vm.Category != ItemCategory.Bags)
+                {
+                    newSaleRequest.Size = vm.Size;
+                }
+
+                vm.SaleId = await vm.CreateNewSale(newSaleRequest);
+
                 DialogResult = true;
             }
         }

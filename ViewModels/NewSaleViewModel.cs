@@ -1,13 +1,18 @@
 ﻿using AVSSalesExplorer.Common;
+using AVSSalesExplorer.DTOs;
+using AVSSalesExplorer.Services;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace AVSSalesExplorer.ViewModels
 {
     public class NewSaleViewModel : INotifyPropertyChanged, IValidatableObject
     {
+        private readonly IItemSaleService _itemSaleService;
+
         private string _customer;
         private decimal _price;
         private ushort _size;
@@ -17,8 +22,14 @@ namespace AVSSalesExplorer.ViewModels
         private bool _customerIsEmpty;
         private bool _addressIsEmpty;
 
-        public  ItemCategory Category { get; set; }
+        public NewSaleViewModel(IItemSaleService itemSaleService)
+        {
+            _itemSaleService = itemSaleService;
+        }
 
+        public ItemCategory Category { get; set; }
+        public int SaleId { get; set; }
+        public int ItemId { get; set; }
         public Visibility SizesVisibility => Category != ItemCategory.Bags ? Visibility.Visible : Visibility.Hidden;
         public byte[] Photo { get; set; }
         public string Description { get; set; }
@@ -131,6 +142,8 @@ namespace AVSSalesExplorer.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public Task<int> CreateNewSale(NewItemSaleRequest request) => _itemSaleService.CreateNewItemSale(request);
+        
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             ClearValidationResults();

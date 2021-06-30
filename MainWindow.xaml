@@ -9,6 +9,7 @@
         mc:Ignorable="d"
         Title="AVS Sales Explorer" Height="768" Width="1366" WindowStartupLocation="CenterScreen">
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <local:ByteArrayToBitmapImageConverter x:Key="byteToImageConverter"/>
         <local:EnumDescriptionConverter x:Key="enumDescriptionConverter"/>
         <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
@@ -66,7 +67,13 @@
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Дата покупки" Binding="{Binding Path=PurchaseDate, StringFormat=dd/MM/yyyy}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Цена, грн."  MinWidth="75" Binding="{Binding Path=Price}"></DataGridTextColumn>
-                <DataGridHyperlinkColumn Header="Продажи" MinWidth="75" Binding="{Binding Path=SalesAmount}"></DataGridHyperlinkColumn>
+                <DataGridTemplateColumn Header="Продажи" MinWidth="75">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="{Binding Sales}" Visibility="{Binding AreSales, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridCheckBoxColumn Header="Наличие" Binding="{Binding Path=InStock}"></DataGridCheckBoxColumn>
                 <DataGridTextColumn Header="Комментарий" MinWidth="175" Width="*" Binding="{Binding Path=Comment}"></DataGridTextColumn>
                 <DataGridTemplateColumn Width="110">

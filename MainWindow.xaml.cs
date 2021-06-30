@@ -94,19 +94,44 @@ namespace AVSSalesExplorer
         private void NewSale_Click(object sender, RoutedEventArgs e)
         {
             var rowVm = GetRowModel(sender);
+            newSaleVm.ItemId = rowVm.Id;
             newSaleVm.Photo = rowVm.Photo;
             newSaleVm.Description = rowVm.Description;
             newSaleVm.Category = rowVm.Category;
 
             if (newSaleVm.Category != ItemCategory.Bags)
             {
-                newSaleVm.Sizes = rowVm.Sizes.Select(s => s.Size).ToArray();
+                if (!rowVm.Sizes.Any())
+                {
+                    MessageBox.Show("Все размеры данного товара проданы.", "Новый товар", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    
+                    return;
+                }
+
+                newSaleVm.Sizes = rowVm.Sizes.Where(s => s.Amount > 0).Select(s => s.Size).ToArray();
+                newSaleVm.Size = newSaleVm.Sizes.FirstOrDefault();
             }
 
             var newSaleDlg = new NewSaleDialog();
             if (newSaleDlg.ShowDialog() == true)
             {
-                // Update sales value
+                // Update sales value and size amount              
+                rowVm.Sales++;
+
+                if (newSaleVm.Category == ItemCategory.Bags)
+                {
+                    return;
+                }
+
+                var currenSizes = rowVm.Sizes.ToList();
+                var sz = currenSizes.Where(s => s.Size == newSaleVm.Size).FirstOrDefault();
+                if (sz is null)
+                {
+                    return;
+                }
+
+                sz.Amount--;
+                rowVm.Sizes = new ObservableCollection<ItemSizeRequest>(currenSizes);
             }
         }
 

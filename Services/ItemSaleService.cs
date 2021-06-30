@@ -36,7 +36,7 @@ namespace AVSSalesExplorer.Services
                 return 0;
             }
 
-            if (size.Amount > 1)
+            if (size.Amount >= 1)
             {
                 size.Amount--;
             }

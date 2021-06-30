@@ -15,6 +15,7 @@ namespace AVSSalesExplorer.ViewModels
         private string _description;
         private DateTime _purchaseDate;
         private bool _inStock;
+        private int _sales;
         private ObservableCollection<ItemSizeRequest> _sizes;
 
         public int Id { get; set; }
@@ -95,9 +96,21 @@ namespace AVSSalesExplorer.ViewModels
             }
         }
 
-        public Sale[] Sales { get; set; }
-        public ItemSizeRequest[] AvailableSizes => Sizes?.Where(s => s.Amount > 0).ToArray() ?? Array.Empty<ItemSizeRequest>();
-        public int? SalesAmount => Sales?.Length;
+        public int Sales
+        { 
+            get => _sales; 
+            set
+            {
+                if (value != _sales)
+                {
+                    _sales = value;
+                    OnPropertyChanged(nameof(Sales));
+                    OnPropertyChanged(nameof(AreSales));
+                }
+            }
+        }
+        public bool AreSales => Sales > 0;
+        public ItemSizeRequest[] AvailableSizes => Sizes?.Where(s => s.Amount > 0).ToArray() ?? Array.Empty<ItemSizeRequest>();       
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -119,7 +132,7 @@ namespace AVSSalesExplorer.ViewModels
                                 Amount = s.Amount, 
                                 Size = s.Size,                                 
                             }).ToArray() ?? Array.Empty<ItemSizeRequest>()),
-                Sales = item.Sales?.ToArray() ?? Array.Empty<Sale>()
+                Sales = item.Sales?.Count ?? 0
             };
 
         private void OnPropertyChanged(string property)
