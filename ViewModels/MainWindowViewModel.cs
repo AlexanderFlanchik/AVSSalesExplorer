@@ -13,10 +13,15 @@ namespace AVSSalesExplorer.ViewModels
         private IList<ItemViewModel> _items;
         private int _pageNumber;
         private int _pageSize;
+        private int _total;
+
+        public int[] PageSizes => new[] { 20, 50, 75, 100 };
 
         public MainWindowViewModel(IItemService itemService)
         {
             _itemService = itemService;
+            PageNumber = 1;
+            PageSize = PageSizes[0];
         }
 
         public IList<ItemViewModel> Items
@@ -54,12 +59,26 @@ namespace AVSSalesExplorer.ViewModels
                 }
             }
         }
+
+        public int Total
+        {
+            get => _total;
+            set
+            {
+                if (value != _total)
+                {
+                    _total = value;
+                    OnPropertyChanged(nameof(Total));
+                }
+            }
+        }
         
         public async Task LoadData()
         {           
-            var itemsRequest = new GetItemsRequest() { PageNumber = 1, PageSize = 50 };
+            var itemsRequest = new GetItemsRequest() { PageNumber = PageNumber, PageSize = PageSize };
             var itemsResponse = await _itemService.GetItems(itemsRequest);
-            
+
+            Total = itemsResponse.Total;
             Items = itemsResponse.Items.ToList();                        
         }
         

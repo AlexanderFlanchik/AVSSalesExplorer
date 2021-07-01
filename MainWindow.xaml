@@ -25,7 +25,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="35"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
             <Label Grid.Row="0" Grid.Column="0" Margin="0,3">Товары</Label>
@@ -149,5 +149,30 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+        <Grid Grid.Row="2" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="140" />
+                <ColumnDefinition Width="250"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+                <TextBlock Text="Всего товаров: " Margin="5,5" Width="80"/>
+                <TextBlock Text="{Binding Total}" Margin="0,5"/>
+            </StackPanel>
+            <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal">
+                <TextBlock Text="Страница: " Width="55" Margin="5,5"/>
+                <TextBlock Text="{Binding PageNumber}" Margin="0,5"/>
+            </StackPanel>
+            <StackPanel Grid.Row="0" Grid.Column="3" Orientation="Horizontal">
+                <TextBlock Text="Товаров на странице:" Margin="5,5"/>
+                <ComboBox SelectedValue="{Binding PageSize}" ItemsSource="{Binding PageSizes}" Height="20" Width="48" Margin="0,5,0,5" SelectionChanged="PageSize_SelectionChanged"/>
+                <Button x:Name="goBackBtn" Content="&#60;" Width="20" Height="20" Margin="20,5,0,5" Click="goBackBtn_Click"/>
+                <Button x:Name="goForwardBtn" Content="&#62;" Width="20" Height="20" Margin="3,5" Click="goForwardBtn_Click"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>

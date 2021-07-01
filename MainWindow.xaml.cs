@@ -149,5 +149,20 @@ namespace AVSSalesExplorer
         {
             e.Handled = true;
         }
+
+        private void goBackBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void goForwardBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void PageSize_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
