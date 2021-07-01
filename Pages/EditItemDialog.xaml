@@ -87,7 +87,7 @@
             <TextBlock Text="Дата покупки" Margin="15,5,5,0"/>
             <DatePicker SelectedDate="{Binding PurchaseDate}" />
             <TextBlock Text="Цена, грн." Margin="50,5,5,0"/>
-            <TextBox Text="{Binding Price}" Width="70" Height="20" PreviewTextInput="Price_PreviewTextInput" />
+            <TextBox Text="{Binding Price}" Width="70" Height="20" IsEnabled="{Binding IsNewItem}" PreviewTextInput="Price_PreviewTextInput" />
         </StackPanel>
         <StackPanel Grid.Column="0" Grid.Row="2" Margin="15,5,10,5">
             <TextBlock Text="Комментарий"/>

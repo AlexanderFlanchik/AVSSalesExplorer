@@ -144,5 +144,10 @@ namespace AVSSalesExplorer
 
         private ItemViewModel GetRowModel(object sender)
             => ((FrameworkElement)sender).DataContext as ItemViewModel;
+
+        private void productGrid_Sorting(object sender, DataGridSortingEventArgs e)
+        {
+            e.Handled = true;
+        }
     }
 }

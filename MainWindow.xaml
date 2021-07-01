@@ -31,10 +31,70 @@
             <Label Grid.Row="0" Grid.Column="0" Margin="0,3">Товары</Label>
             <Button x:Name="AddNewItem" Height="20" Width="95" Margin="5,0" Content="Новый товар.." Click="AddNewItem_Click"/>
         </StackPanel>
-        <DataGrid Grid.Row="1" Grid.Column="0" x:Name="productGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Items}">
+        <DataGrid Grid.Row="1" Grid.Column="0" x:Name="productGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Items}" Sorting="productGrid_Sorting">
             <DataGrid.Resources>
-                <Style x:Key="headerCellStyle" TargetType="TextBlock">
+                <Style TargetType="Button" x:Key="rowActionButton">
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Height" Value="20"/>
+                    <Setter Property="Margin" Value="1,1,1,1"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Foreground" Value="Navy"/>
+                </Style>
+                <Style TargetType="Button" x:Key="editButton">
+                    <Setter Property="Width" Value="95"/>
+                    <Setter Property="Height" Value="20"/>
                     <Setter Property="Margin" Value="0,5,5,5"/>
+                </Style>
+                <Style TargetType="Button" x:Key="deleteButton">
+                    <Setter Property="Width" Value="95"/>
+                    <Setter Property="Height" Value="20"/>
+                    <Setter Property="Margin" Value="0,0,5,5"/>
+                </Style>
+                <Style TargetType="Button" x:Key="newSaleButton">
+                    <Setter Property="Width" Value="95"/>
+                    <Setter Property="Height" Value="20"/>
+                    <Setter Property="Margin" Value="0,0,5,5"/>
+                </Style>
+                <Style TargetType="DataGridCell" x:Key="SalesCell">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                <Grid Background="{Binding Background}">
+                                    <ContentPresenter VerticalAlignment="Top" />
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Background" Value="{x:Null}" />
+                    <Setter Property="BorderBrush" Value="{x:Null}" />
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{x:Null}" />
+                            <Setter Property="BorderBrush" Value="{x:Null}" />
+                            <Setter Property="Foreground" Value="Black"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+                <Style x:Key="{x:Type DataGridCell}" TargetType="{x:Type DataGridCell}">
+                        <Setter Property="Background" Value="{x:Null}" />
+                        <Setter Property="BorderBrush" Value="{x:Null}" />
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="{x:Null}" />
+                                <Setter Property="BorderBrush" Value="{x:Null}" />
+                                <Setter Property="Foreground" Value="Black"/>
+                        </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="Background" Value="{x:Null}" />
+                    <Setter Property="BorderBrush" Value="{x:Null}" />
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{x:Null}" />
+                            <Setter Property="BorderBrush" Value="{x:Null}" />
+                        </Trigger>
+                    </Style.Triggers>
                 </Style>
             </DataGrid.Resources>
             <DataGrid.Columns>
@@ -67,10 +127,10 @@
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Дата покупки" Binding="{Binding Path=PurchaseDate, StringFormat=dd/MM/yyyy}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Цена, грн."  MinWidth="75" Binding="{Binding Path=Price}"></DataGridTextColumn>
-                <DataGridTemplateColumn Header="Продажи" MinWidth="75">
+                <DataGridTemplateColumn Header="Продажи" MinWidth="75" CellStyle="{StaticResource SalesCell}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="{Binding Sales}" Visibility="{Binding AreSales, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                            <Button Style="{StaticResource rowActionButton}" Content="{Binding Sales}" Visibility="{Binding AreSales, Converter={StaticResource BoolToVisibilityConverter}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -80,9 +140,9 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <Button Width="90" Height="20" Content="Редактировать" Margin="0,5,5,5" Click="Edit_Click"></Button>
-                                <Button Width="90" Height="20" Content="Удалить" Margin="0,0,5,5" Click="Delete_Click"></Button>
-                                <Button Width="90" Height="20" Content="Новая продажа.." Margin="0,0,5,5" Click="NewSale_Click" Visibility="{Binding InStock,Converter={StaticResource BoolToVisibilityConverter}}"></Button>
+                                <Button Style="{StaticResource editButton}" Content="Редактировать" Click="Edit_Click"></Button>
+                                <Button Style="{StaticResource deleteButton}" Content="Удалить" Click="Delete_Click"></Button>
+                                <Button Style="{StaticResource newSaleButton}" Content="Новая продажа.." Click="NewSale_Click" Visibility="{Binding InStock, Converter={StaticResource BoolToVisibilityConverter}}"></Button>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
