@@ -15,6 +15,7 @@ namespace AVSSalesExplorer.ViewModels
         private DateTime _purchaseDate;
         private bool _inStock;
         private int _sales;
+        private string _comment;
         private ObservableCollection<ItemSizeRequest> _sizes;
 
         public int Id { get; set; }
@@ -82,7 +83,18 @@ namespace AVSSalesExplorer.ViewModels
             }
         }
 
-        public string Comment { get; set; }
+        public string Comment 
+        { 
+            get => _comment; 
+            set
+            {
+                if (value != _comment)
+                {
+                    _comment = value;
+                    OnPropertyChanged(nameof(Comment));
+                }
+            }
+        }
 
         public ObservableCollection<ItemSizeRequest> Sizes 
         { 
