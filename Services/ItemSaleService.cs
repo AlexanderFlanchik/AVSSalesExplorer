@@ -48,6 +48,8 @@ namespace AVSSalesExplorer.Services
                 {
                     return 0;   // Cannot sale because the item size is out of stock.
                 }
+
+                item.InStock = item.Sizes.Any(s => s.Amount > 0);
             }
             
             var sale = new Sale()
@@ -60,7 +62,7 @@ namespace AVSSalesExplorer.Services
                 Customer = request.Customer
             };
                        
-            item.Sales.Add(sale);
+            item.Sales.Add(sale);            
             await _itemContext.SaveChangesAsync();
 
             return sale.Id;            

@@ -71,7 +71,12 @@ namespace AVSSalesExplorer.Pages
 
                     FillItemRequestData(updateItemRequest);
 
-                    await vm.UpdateItem(updateItemRequest);
+                    await vm.UpdateItem(updateItemRequest);       
+
+                    if (vm.Category != ItemCategory.Bags)             
+                    {
+                        vm.InStock = vm.Sizes.Any(s => s.Amount > 0);
+                    }
                 }
 
                 DialogResult = true;

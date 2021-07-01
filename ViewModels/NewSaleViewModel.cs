@@ -169,6 +169,14 @@ namespace AVSSalesExplorer.ViewModels
             PriceNotSet = false;
             CustomerIsEmpty = false;
             AddressIsEmpty = false;
-        }     
+        }
+
+        public void ClearForm()
+        {
+            Customer = null;
+            Address = null;
+            Price = 0;
+            Phone = null;
+        }
     }
 }

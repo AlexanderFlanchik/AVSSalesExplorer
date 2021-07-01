@@ -126,7 +126,7 @@ namespace AVSSalesExplorer.ViewModels
             set
             {
                 _sizes = value;
-                OnPropertyChanged(nameof(Sizes));
+                OnPropertyChanged(nameof(Sizes));                
             }
         }
         

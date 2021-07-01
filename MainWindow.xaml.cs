@@ -47,7 +47,7 @@ namespace AVSSalesExplorer
                     Photo = rowVm.Photo,
                     PurchaseDate = rowVm.PurchaseDate,
                     Comment = rowVm.Comment,
-                    Sizes = rowVm.Sizes.ToArray(),
+                    Sizes = rowVm.Sizes.Where(s => s.Amount > 0).ToArray(),
                     InStock = rowVm.InStock
                 };
 
@@ -95,6 +95,8 @@ namespace AVSSalesExplorer
 
         private async void NewSale_Click(object sender, RoutedEventArgs e)
         {
+            newSaleVm.ClearForm();
+
             var rowVm = GetRowModel(sender);
             newSaleVm.ItemId = rowVm.Id;
             newSaleVm.Photo = rowVm.Photo;
@@ -135,7 +137,8 @@ namespace AVSSalesExplorer
                 }
 
                 sz.Amount--;
-                rowVm.Sizes = new ObservableCollection<ItemSizeRequest>(currenSizes);                
+                rowVm.Sizes = new ObservableCollection<ItemSizeRequest>(currenSizes);
+                rowVm.InStock = currenSizes.Where(s => s.Amount > 0).Any();
             }
         }
 
