@@ -6,6 +6,7 @@ using AVSSalesExplorer.DTOs;
 using AVSSalesExplorer.Models;
 using AVSSalesExplorer.ViewModels;
 using AVSSalesExplorer.Common;
+using System.Collections.Generic;
 
 namespace AVSSalesExplorer.Services
 {
@@ -57,8 +58,8 @@ namespace AVSSalesExplorer.Services
                                 Size = s.Size, 
                                 Amount = s.Amount 
                             }
-                        ).ToArray() ?? Array.Empty<ItemSize>(),
-                Sales = Array.Empty<Sale>(),
+                        ).ToList() ?? new List<ItemSize>(),
+                Sales = new List<Sale>(),
                 Comment = request.Comment
             };
 
