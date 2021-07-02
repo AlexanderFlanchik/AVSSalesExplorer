@@ -1,5 +1,6 @@
 ﻿using AVSSalesExplorer.DTOs;
 using AVSSalesExplorer.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,8 +15,9 @@ namespace AVSSalesExplorer.ViewModels
         private int _pageNumber;
         private int _pageSize;
         private int _total;
+        private int _totalPages;
 
-        public int[] PageSizes => new[] { 20, 50, 75, 100 };
+        public int[] PageSizes => new[] { 10, 50, 75, 100 };
 
         public MainWindowViewModel(IItemService itemService)
         {
@@ -42,7 +44,10 @@ namespace AVSSalesExplorer.ViewModels
                 if (_pageNumber != value)
                 {
                     _pageNumber = value;
+
                     OnPropertyChanged(nameof(PageNumber));
+                    OnPropertyChanged(nameof(IsForwardButtonShown));
+                    OnPropertyChanged(nameof(IsBackButtonShown));
                 }
             }
         }
@@ -54,8 +59,8 @@ namespace AVSSalesExplorer.ViewModels
             {
                 if (value != _pageSize)
                 {
-                    _pageSize = value;
-                    OnPropertyChanged(nameof(PageSize));
+                    _pageSize = value;                    
+                    OnPropertyChanged(nameof(PageSize));                    
                 }
             }
         }
@@ -72,6 +77,20 @@ namespace AVSSalesExplorer.ViewModels
                 }
             }
         }
+
+        public int TotalPages
+        {
+            get => _totalPages;
+            set
+            {
+                if (value != _totalPages)
+                {
+                    _totalPages = value;
+                    OnPropertyChanged(nameof(TotalPages));
+                    OnPropertyChanged(nameof(IsForwardButtonShown));                    
+                }
+            }
+        }
         
         public async Task LoadData()
         {           
@@ -79,9 +98,20 @@ namespace AVSSalesExplorer.ViewModels
             var itemsResponse = await _itemService.GetItems(itemsRequest);
 
             Total = itemsResponse.Total;
+            TotalPages = (int)Math.Ceiling((decimal)Total / PageSize);
+
             Items = itemsResponse.Items.ToList();                        
         }
-        
+
+        public bool IsBackButtonShown => PageNumber > 1;
+        public bool IsForwardButtonShown
+        {
+            get
+            {
+                return PageNumber < TotalPages;
+            }
+        }
+
         public Task DeleteItemById(int itemId) => _itemService.DeleteItem(itemId);
 
         public Task UpdateItemInStock(int itemId, bool inStock) => _itemService.UpdateItemInStock(new UpdateItemInStockRequest { Id = itemId, InStock = inStock });               

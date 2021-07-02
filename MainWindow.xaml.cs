@@ -150,19 +150,28 @@ namespace AVSSalesExplorer
             e.Handled = true;
         }
 
-        private void goBackBtn_Click(object sender, RoutedEventArgs e)
+        private async void goBackBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            vm.PageNumber--;
+            await vm.LoadData();
         }
 
-        private void goForwardBtn_Click(object sender, RoutedEventArgs e)
+        private async void goForwardBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            vm.PageNumber++;
+            await vm.LoadData();
         }
 
-        private void PageSize_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void PageSize_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (vm.Items == null || !vm.Items.Any())
+            {
+                e.Handled = true;
+                return;
+            }
 
+            vm.PageNumber = 1;
+            await vm.LoadData();            
         }
     }
 }
