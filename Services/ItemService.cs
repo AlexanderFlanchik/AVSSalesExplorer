@@ -30,10 +30,13 @@ namespace AVSSalesExplorer.Services
 
         public async Task<GetItemsResponse> GetItems(GetItemsRequest request)
         {
-            IQueryable<Item> itemsQuery = itemContext.Items.Include(i => i.Sales).Include(i => i.Sizes);
+            IQueryable<Item> itemsQuery = itemContext.Items.Include(i => i.Sales).Include(i => i.Sizes);           
             var itemsTotal = itemsQuery.Count();
 
             // Do filter operations & pagination
+            // Default sort
+            itemsQuery = itemsQuery.OrderByDescending(id => id.Id);
+
             itemsQuery = itemsQuery.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize);
             
             var items = await itemsQuery.ToListAsync();
