@@ -17,7 +17,7 @@ namespace AVSSalesExplorer.ViewModels
         private int _total;
         private int _totalPages;
 
-        public int[] PageSizes => new[] { 10, 50, 75, 100 };
+        public int[] PageSizes => new[] { 25, 50, 75, 100 };
 
         public MainWindowViewModel(IItemService itemService)
         {
@@ -33,9 +33,14 @@ namespace AVSSalesExplorer.ViewModels
             {
                 _items = value;
                 OnPropertyChanged(nameof(Items));
+                OnPropertyChanged(nameof(ItemsGridShown));
+                OnPropertyChanged(nameof(NoItemsMessagesVisible));
             }
         }
-        
+
+        public bool ItemsGridShown => Items is not null && Items.Any();
+        public bool NoItemsMessagesVisible => Items is null || !Items.Any();
+
         public int PageNumber
         {
             get => _pageNumber;
@@ -104,16 +109,8 @@ namespace AVSSalesExplorer.ViewModels
         }
 
         public bool IsBackButtonShown => PageNumber > 1;
-        public bool IsForwardButtonShown
-        {
-            get
-            {
-                return PageNumber < TotalPages;
-            }
-        }
-
+        public bool IsForwardButtonShown => PageNumber < TotalPages;        
         public Task DeleteItemById(int itemId) => _itemService.DeleteItem(itemId);
-
         public Task UpdateItemInStock(int itemId, bool inStock) => _itemService.UpdateItemInStock(new UpdateItemInStockRequest { Id = itemId, InStock = inStock });               
     }
 }

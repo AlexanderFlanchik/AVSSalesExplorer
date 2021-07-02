@@ -81,6 +81,7 @@ namespace AVSSalesExplorer.Services
             var sales = item.Sales.Select(s => new SaleViewModel 
                         { 
                             Id = s.Id, 
+                            Size = s.Size?.Size,
                             Price = s.Price, 
                             Profit = s.Price - item.Price,
                             Address = s.Address, 

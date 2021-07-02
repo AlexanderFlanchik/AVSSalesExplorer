@@ -28,10 +28,16 @@
             <RowDefinition Height="35"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
-            <Label Grid.Row="0" Grid.Column="0" Margin="0,3">Товары</Label>
+            <Label Grid.Row="0" Grid.Column="0">Товары</Label>
             <Button x:Name="AddNewItem" Height="20" Width="95" Margin="5,0" Content="Новый товар.." Click="AddNewItem_Click"/>
         </StackPanel>
-        <DataGrid Grid.Row="1" Grid.Column="0" x:Name="productGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Items}" Sorting="productGrid_Sorting">
+        <DataGrid Grid.Row="1" Grid.Column="0" 
+                  x:Name="productGrid" 
+                  IsReadOnly="True" 
+                  AutoGenerateColumns="False" 
+                  Visibility="{Binding ItemsGridShown, Converter={StaticResource BoolToVisibilityConverter}}" 
+                  ItemsSource="{Binding Items}" 
+                  Sorting="productGrid_Sorting">
             <DataGrid.Resources>
                 <Style TargetType="Button" x:Key="rowActionButton">
                     <Setter Property="BorderThickness" Value="0"/>
@@ -149,7 +155,10 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Grid Grid.Row="2" Grid.Column="0">
+        <StackPanel Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Visibility="{Binding NoItemsMessagesVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+            <TextBlock Foreground="Navy" FontWeight="Bold" FontSize="12pt" Text="Список товаров пуст. Нажмите на &#34;Новый товар&#34;, чтобы начать добавлять товары в базу."/>
+        </StackPanel>
+        <Grid Grid.Row="2" Grid.Column="0" Visibility="{Binding ItemsGridShown, Converter={StaticResource BoolToVisibilityConverter}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
