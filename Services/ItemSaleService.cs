@@ -82,8 +82,9 @@ namespace AVSSalesExplorer.Services
                         { 
                             Id = s.Id, 
                             Price = s.Price, 
+                            Profit = s.Price - item.Price,
                             Address = s.Address, 
-                            Customer = s.Customer, 
+                            Customer = s.Customer,                             
                             Phone = s.Phone, 
                             SaleDate = s.SaleDate 
                         }

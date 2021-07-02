@@ -130,7 +130,7 @@
                 <DataGridTemplateColumn Header="Продажи" MinWidth="75" CellStyle="{StaticResource SalesCell}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Style="{StaticResource rowActionButton}" Content="{Binding Sales}" Visibility="{Binding AreSales, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                            <Button Style="{StaticResource rowActionButton}" Content="{Binding Sales}" Visibility="{Binding AreSales, Converter={StaticResource BoolToVisibilityConverter}}" Click="SalesDialogOpenBtn_Click"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

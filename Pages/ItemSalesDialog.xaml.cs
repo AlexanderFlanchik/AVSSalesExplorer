@@ -1,27 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using AVSSalesExplorer.ViewModels;
 
 namespace AVSSalesExplorer.Pages
 {
     /// <summary>
-    /// Логика взаимодействия для ItemSalesDialog.xaml
+    /// Interaction logic for ItemSalesDialog.xaml
     /// </summary>
     public partial class ItemSalesDialog : Window
     {
+        private readonly ItemSalesViewModel vm;
+
         public ItemSalesDialog()
         {
             InitializeComponent();
+            vm = DependencyResolver.Instance.GetRequiredService<ItemSalesViewModel>();
+            DataContext = vm;
+
+            SalesGrid.Loaded += async (sender, e) => {
+                await vm.LoadData();
+            };
+        }
+
+        private void OKButton_Clicked(object sender, RoutedEventArgs e)
+        {
+           DialogResult = true;
         }
     }
 }

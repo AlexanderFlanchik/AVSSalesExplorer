@@ -17,6 +17,7 @@ namespace AVSSalesExplorer
         private readonly MainWindowViewModel vm;
         private readonly EditItemViewModel editVm;
         private readonly NewSaleViewModel newSaleVm;
+        private readonly ItemSalesViewModel salesDialogVm;
 
         public MainWindow()
         {
@@ -25,6 +26,7 @@ namespace AVSSalesExplorer
             vm = DependencyResolver.Instance.GetRequiredService<MainWindowViewModel>();
             editVm = DependencyResolver.Instance.GetRequiredService<EditItemViewModel>();
             newSaleVm = DependencyResolver.Instance.GetRequiredService<NewSaleViewModel>();
+            salesDialogVm = DependencyResolver.Instance.GetRequiredService<ItemSalesViewModel>();
 
             DataContext = vm;
             productGrid.Loaded += ProductGrid_Loaded;            
@@ -140,6 +142,15 @@ namespace AVSSalesExplorer
                 rowVm.Sizes = new ObservableCollection<ItemSizeRequest>(currenSizes);
                 rowVm.InStock = currenSizes.Where(s => s.Amount > 0).Any();
             }
+        }
+
+        private void SalesDialogOpenBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var rowVm = GetRowModel(sender);
+            salesDialogVm.ItemId = rowVm.Id;
+
+            var salesDialog = new ItemSalesDialog();
+            salesDialog.ShowDialog();
         }
 
         private ItemViewModel GetRowModel(object sender)

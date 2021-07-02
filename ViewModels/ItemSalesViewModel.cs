@@ -4,8 +4,9 @@ using System.Threading.Tasks;
 
 namespace AVSSalesExplorer.ViewModels
 {
-    public class ItemSalesViewModel
+    public class ItemSalesViewModel : ViewModelBase
     {
+        private SaleViewModel[] _sales;
         private readonly IItemSaleService _saleService;
 
         public ItemSalesViewModel(IItemSaleService saleService)
@@ -25,6 +26,14 @@ namespace AVSSalesExplorer.ViewModels
         }
 
         public int ItemId { get; set; }
-        public SaleViewModel[] Sales { get; set; }
+        public SaleViewModel[] Sales 
+        { 
+            get => _sales; 
+            set
+            {
+                _sales = value;
+                OnPropertyChanged(nameof(Sales));
+            } 
+        }
     }
 }
