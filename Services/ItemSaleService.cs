@@ -1,6 +1,7 @@
 ﻿using AVSSalesExplorer.Common;
 using AVSSalesExplorer.DTOs;
 using AVSSalesExplorer.Models;
+using AVSSalesExplorer.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ namespace AVSSalesExplorer.Services
     public interface IItemSaleService
     {
         Task<int> CreateNewItemSale(NewItemSaleRequest request);
+        Task<GetSalesResponse> GetItemSales(GetSalesRequest request);
     }
 
     public class ItemSaleService : IItemSaleService
@@ -66,6 +68,31 @@ namespace AVSSalesExplorer.Services
             await _itemContext.SaveChangesAsync();
 
             return sale.Id;            
+        }
+
+        public async Task<GetSalesResponse> GetItemSales(GetSalesRequest request)
+        {
+            var item = await _itemContext.Items.Include(s => s.Sales).FirstOrDefaultAsync(i => i.Id == request.ItemId);
+            if (item is null || item.Sales is null || !item.Sales.Any())
+            {
+                return new GetSalesResponse();
+            }
+
+            var sales = item.Sales.Select(s => new SaleViewModel 
+                        { 
+                            Id = s.Id, 
+                            Price = s.Price, 
+                            Address = s.Address, 
+                            Customer = s.Customer, 
+                            Phone = s.Phone, 
+                            SaleDate = s.SaleDate 
+                        }
+                ).ToArray();
+
+            return new GetSalesResponse
+            {
+                Sales = sales
+            };
         }
     }
 }
