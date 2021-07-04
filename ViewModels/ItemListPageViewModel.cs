@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AVSSalesExplorer.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase
+    public class ItemListPageViewModel : ViewModelBase
     {
         private readonly IItemService _itemService;
 
@@ -19,7 +19,7 @@ namespace AVSSalesExplorer.ViewModels
 
         public int[] PageSizes => new[] { 25, 50, 75, 100 };
 
-        public MainWindowViewModel(IItemService itemService)
+        public ItemListPageViewModel(IItemService itemService)
         {
             _itemService = itemService;
             PageNumber = 1;

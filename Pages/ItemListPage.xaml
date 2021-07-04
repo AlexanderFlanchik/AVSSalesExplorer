@@ -1,0 +1,189 @@
+﻿<Page x:Class="AVSSalesExplorer.Pages.ItemListPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:AVSSalesExplorer"
+      xmlns:common="clr-namespace:AVSSalesExplorer.Common"
+      xmlns:System="clr-namespace:System;assembly=mscorlib"
+      mc:Ignorable="d" 
+      d:DesignHeight="768" d:DesignWidth="1366">
+    <Page.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <local:ByteArrayToBitmapImageConverter x:Key="byteToImageConverter"/>
+        <local:EnumDescriptionConverter x:Key="enumDescriptionConverter"/>
+        <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="common:ItemCategory"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Page.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="35"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <Button x:Name="GobackBtn" Height="20" Width="80" Margin="5,0,0,0" Content="Назад" Click="GobackBtn_Click"/>
+            <Button x:Name="AddNewItem" Height="20" Width="95" Margin="5,0" Content="Новый товар.." Click="AddNewItem_Click"/>
+        </StackPanel>
+        <DataGrid Grid.Row="1" Grid.Column="0" 
+                  x:Name="productGrid" 
+                  IsReadOnly="True" 
+                  AutoGenerateColumns="False" 
+                  Visibility="{Binding ItemsGridShown, Converter={StaticResource BoolToVisibilityConverter}}" 
+                  ItemsSource="{Binding Items}" 
+                  Sorting="productGrid_Sorting">
+            <DataGrid.Resources>
+                <Style TargetType="Button" x:Key="rowActionButton">
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Height" Value="20"/>
+                    <Setter Property="Margin" Value="1,1,1,1"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Foreground" Value="Navy"/>
+                </Style>
+                <Style TargetType="Button" x:Key="editButton">
+                    <Setter Property="Width" Value="95"/>
+                    <Setter Property="Height" Value="20"/>
+                    <Setter Property="Margin" Value="0,5,5,5"/>
+                </Style>
+                <Style TargetType="Button" x:Key="deleteButton">
+                    <Setter Property="Width" Value="95"/>
+                    <Setter Property="Height" Value="20"/>
+                    <Setter Property="Margin" Value="0,0,5,5"/>
+                </Style>
+                <Style TargetType="Button" x:Key="newSaleButton">
+                    <Setter Property="Width" Value="95"/>
+                    <Setter Property="Height" Value="20"/>
+                    <Setter Property="Margin" Value="0,0,5,5"/>
+                </Style>
+                <Style TargetType="DataGridCell" x:Key="SalesCell">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                <Grid Background="{Binding Background}">
+                                    <ContentPresenter VerticalAlignment="Top" />
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Background" Value="{x:Null}" />
+                    <Setter Property="BorderBrush" Value="{x:Null}" />
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{x:Null}" />
+                            <Setter Property="BorderBrush" Value="{x:Null}" />
+                            <Setter Property="Foreground" Value="Black"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+                <Style x:Key="{x:Type DataGridCell}" TargetType="{x:Type DataGridCell}">
+                    <Setter Property="Background" Value="{x:Null}" />
+                    <Setter Property="BorderBrush" Value="{x:Null}" />
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{x:Null}" />
+                            <Setter Property="BorderBrush" Value="{x:Null}" />
+                            <Setter Property="Foreground" Value="Black"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="Background" Value="{x:Null}" />
+                    <Setter Property="BorderBrush" Value="{x:Null}" />
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{x:Null}" />
+                            <Setter Property="BorderBrush" Value="{x:Null}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Width="120" Header="Товар">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <ItemContainerTemplate>
+                            <Image Width="100" Height="100" Source="{Binding Path=Photo, Converter={StaticResource byteToImageConverter}}"/>
+                        </ItemContainerTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn MinWidth="85" Header="Категория" Binding="{Binding Path=Category, Converter={ StaticResource enumDescriptionConverter }}" />
+                <DataGridTextColumn MinWidth="150" Header="Описание" Width="*" Binding="{Binding Path=Description}"></DataGridTextColumn>
+                <DataGridTemplateColumn Header="Размеры">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <ItemContainerTemplate>
+                            <ItemsControl ItemsSource="{Binding AvailableSizes}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Columns="5"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Size}" Margin="0,0,5,5"></TextBlock>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ItemContainerTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Дата покупки" Binding="{Binding Path=PurchaseDate, StringFormat=dd/MM/yyyy}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Цена, грн."  MinWidth="75" Binding="{Binding Path=Price}"></DataGridTextColumn>
+                <DataGridTemplateColumn Header="Продажи" MinWidth="75" CellStyle="{StaticResource SalesCell}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Style="{StaticResource rowActionButton}" Content="{Binding Sales}" Visibility="{Binding AreSales, Converter={StaticResource BoolToVisibilityConverter}}" Click="SalesDialogOpenBtn_Click"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridCheckBoxColumn Header="Наличие" Binding="{Binding Path=InStock}"></DataGridCheckBoxColumn>
+                <DataGridTextColumn Header="Комментарий" MinWidth="175" Width="*" Binding="{Binding Path=Comment}"></DataGridTextColumn>
+                <DataGridTemplateColumn Width="110">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Button Style="{StaticResource editButton}" Content="Редактировать" Click="Edit_Click"></Button>
+                                <Button Style="{StaticResource deleteButton}" Content="Удалить" Click="Delete_Click"></Button>
+                                <Button Style="{StaticResource newSaleButton}" Content="Новая продажа.." Click="NewSale_Click" Visibility="{Binding InStock, Converter={StaticResource BoolToVisibilityConverter}}"></Button>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Visibility="{Binding NoItemsMessagesVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+            <TextBlock Foreground="Navy" FontWeight="Bold" FontSize="12pt" Text="Список товаров пуст. Нажмите на &#34;Новый товар&#34;, чтобы начать добавлять товары в базу."/>
+        </StackPanel>
+        <Grid Grid.Row="2" Grid.Column="0" Visibility="{Binding ItemsGridShown, Converter={StaticResource BoolToVisibilityConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="140" />
+                <ColumnDefinition Width="250"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+                <TextBlock Text="Всего товаров: " Margin="5,5" Width="80"/>
+                <TextBlock Text="{Binding Total}" Margin="0,5"/>
+            </StackPanel>
+            <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal">
+                <TextBlock Text="Страница: " Width="55" Margin="5,5"/>
+                <TextBlock Text="{Binding PageNumber}" Margin="0,5"/>
+                <TextBlock Text="/" Margin="0,5"/>
+                <TextBlock Text="{Binding TotalPages}" Margin="0,5"/>
+            </StackPanel>
+            <StackPanel Grid.Row="0" Grid.Column="3" Orientation="Horizontal">
+                <TextBlock Text="Товаров на странице:" Margin="5,5"/>
+                <ComboBox SelectedValue="{Binding PageSize}" ItemsSource="{Binding PageSizes}" Height="20" Width="48" Margin="0,5,0,5" SelectionChanged="PageSize_SelectionChanged"/>
+                <Button x:Name="goBackBtn" Content="&#60;" Width="20" Height="20" Margin="20,5,0,5" IsEnabled="{Binding IsBackButtonShown}" Click="goBackBtn_Click"/>
+                <Button x:Name="goForwardBtn" Content="&#62;" Width="20" Height="20" Margin="3,5" IsEnabled="{Binding IsForwardButtonShown}" Click="goForwardBtn_Click"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>

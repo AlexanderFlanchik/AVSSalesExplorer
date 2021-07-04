@@ -3,12 +3,6 @@ using AVSSalesExplorer.Services;
 using AVSSalesExplorer.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace AVSSalesExplorer
@@ -28,7 +22,8 @@ namespace AVSSalesExplorer
                 services.AddTransient<IItemService, ItemService>();
                 services.AddTransient<IItemSaleService, ItemSaleService>();
 
-                services.AddSingleton<MainWindowViewModel>();                
+                services.AddSingleton<MainWindow>();
+                services.AddSingleton<ItemListPageViewModel>();                
                 services.AddSingleton<EditItemViewModel>();
                 services.AddSingleton<NewItemSizeViewModel>();
                 services.AddSingleton<NewSaleViewModel>();
@@ -43,9 +38,10 @@ namespace AVSSalesExplorer
             base.OnStartup(e);
             var dbContext = host.Services.GetRequiredService<ItemDbContext>();
             dbContext.Database.EnsureCreated();
-                        
-            var mainWindow = new MainWindow();
-            mainWindow.Show();
+
+            var mainWindow = host.Services.GetRequiredService<MainWindow>();
+            mainWindow.Content = new LandingPage();
+            mainWindow.Show();            
         }
 
         protected override async void OnExit(ExitEventArgs e)
