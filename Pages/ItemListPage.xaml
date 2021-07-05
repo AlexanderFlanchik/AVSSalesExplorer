@@ -9,6 +9,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="768" d:DesignWidth="1366">
     <Page.Resources>
+        <common:CategoriesList x:Key="CategoriesList" />
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <local:ByteArrayToBitmapImageConverter x:Key="byteToImageConverter"/>
         <local:EnumDescriptionConverter x:Key="enumDescriptionConverter"/>
@@ -24,14 +25,29 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="35"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="35"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
             <Button x:Name="GobackBtn" Height="20" Width="80" Margin="5,0,0,0" Content="Назад" Click="GobackBtn_Click"/>
             <Button x:Name="AddNewItem" Height="20" Width="95" Margin="5,0" Content="Новый товар.." Click="AddNewItem_Click"/>
         </StackPanel>
-        <DataGrid Grid.Row="1" Grid.Column="0" 
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
+            <TextBlock Text="Товары:" Margin="5,8"/>
+            <ComboBox ItemsSource="{StaticResource CategoriesList}" Height="25" Width="70" SelectedValue="{Binding CategoryFilter}" SelectedValuePath="Key" DisplayMemberPath="Value"/>
+            <TextBlock Text="Дата покупки от:" Margin="18,8,3,0"/>
+            <DatePicker x:Name="PurchaseDateFilterFrom" Margin="3,3" Height="25" />
+            <TextBlock Text="до:" Margin="5, 8"/>
+            <DatePicker x:Name="PurchaseDateFilterTo" Margin="3,3" Height="25" />
+            <TextBlock Text="Цена, грн., от:" Margin="5, 8"/>
+            <TextBox Width="75" Height="20"/>
+            <TextBlock Text="до:" Margin="5, 8"/>
+            <TextBox Width="75" Height="20"/>
+            <Button x:Name="ApplyFiltersBtn" Height="20" Width="70" Margin="8,0,2,0" Content="Применить" />
+            <Button x:Name="ClearFiltersBtn" Height="20" Width="70" Margin="2,0" Content="Очистить" />
+        </StackPanel>
+        <DataGrid Grid.Row="2" Grid.Column="0" 
                   x:Name="productGrid" 
                   IsReadOnly="True" 
                   AutoGenerateColumns="False" 
@@ -155,10 +171,10 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Visibility="{Binding NoItemsMessagesVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+        <StackPanel Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" Visibility="{Binding NoItemsMessagesVisible, Converter={StaticResource BoolToVisibilityConverter}}">
             <TextBlock Foreground="Navy" FontWeight="Bold" FontSize="12pt" Text="Список товаров пуст. Нажмите на &#34;Новый товар&#34;, чтобы начать добавлять товары в базу."/>
         </StackPanel>
-        <Grid Grid.Row="2" Grid.Column="0" Visibility="{Binding ItemsGridShown, Converter={StaticResource BoolToVisibilityConverter}}">
+        <Grid Grid.Row="3" Grid.Column="0" Visibility="{Binding ItemsGridShown, Converter={StaticResource BoolToVisibilityConverter}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>

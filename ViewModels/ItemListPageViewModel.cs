@@ -1,4 +1,5 @@
-﻿using AVSSalesExplorer.DTOs;
+﻿using AVSSalesExplorer.Common;
+using AVSSalesExplorer.DTOs;
 using AVSSalesExplorer.Services;
 using System;
 using System.Collections.Generic;
@@ -16,16 +17,18 @@ namespace AVSSalesExplorer.ViewModels
         private int _pageSize;
         private int _total;
         private int _totalPages;
+        private int _categoryFilter;
 
         public int[] PageSizes => new[] { 25, 50, 75, 100 };
-
+        
         public ItemListPageViewModel(IItemService itemService)
         {
             _itemService = itemService;
             PageNumber = 1;
             PageSize = PageSizes[0];
+            CategoryFilter = -1;
         }
-
+       
         public IList<ItemViewModel> Items
         {
             get => _items;
@@ -96,7 +99,20 @@ namespace AVSSalesExplorer.ViewModels
                 }
             }
         }
-        
+
+        public int CategoryFilter
+        {
+            get => _categoryFilter;
+            set
+            {
+                if (value != _categoryFilter)
+                {
+                    _categoryFilter = value;
+                    OnPropertyChanged(nameof(CategoryFilter));
+                }
+            }
+        }
+
         public async Task LoadData()
         {           
             var itemsRequest = new GetItemsRequest() { PageNumber = PageNumber, PageSize = PageSize };
@@ -111,6 +127,6 @@ namespace AVSSalesExplorer.ViewModels
         public bool IsBackButtonShown => PageNumber > 1;
         public bool IsForwardButtonShown => PageNumber < TotalPages;        
         public Task DeleteItemById(int itemId) => _itemService.DeleteItem(itemId);
-        public Task UpdateItemInStock(int itemId, bool inStock) => _itemService.UpdateItemInStock(new UpdateItemInStockRequest { Id = itemId, InStock = inStock });               
-    }
+        public Task UpdateItemInStock(int itemId, bool inStock) => _itemService.UpdateItemInStock(new UpdateItemInStockRequest { Id = itemId, InStock = inStock });                
+    }   
 }

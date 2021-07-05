@@ -188,6 +188,6 @@ namespace AVSSalesExplorer.Pages
         {
             var mainWindow = DependencyResolver.Instance.GetRequiredService<MainWindow>();
             mainWindow.Content = new LandingPage();
-        }
+        }                  
     }
 }
