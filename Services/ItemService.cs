@@ -31,12 +31,26 @@ namespace AVSSalesExplorer.Services
         public async Task<GetItemsResponse> GetItems(GetItemsRequest request)
         {
             IQueryable<Item> itemsQuery = itemContext.Items.Include(i => i.Sales).Include(i => i.Sizes);           
-            var itemsTotal = itemsQuery.Count();
-
+           
             // Do filter operations & pagination
             // Default sort
             itemsQuery = itemsQuery.OrderByDescending(id => id.Id);
+            if (request.CategoryFilter >= 0)
+            {
+                itemsQuery = itemsQuery.Where(r => r.Category == (ItemCategory)request.CategoryFilter);
+            }
 
+            if (request.PriceFrom.HasValue)
+            {
+                itemsQuery = itemsQuery.Where(r => r.Price >= request.PriceFrom.Value);
+            }
+
+            if (request.PriceTo.HasValue)
+            {
+                itemsQuery = itemsQuery.Where(r => r.Price <= request.PriceTo.Value);
+            }
+
+            var itemsTotal = itemsQuery.Count();
             itemsQuery = itemsQuery.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize);
             
             var items = await itemsQuery.ToListAsync();

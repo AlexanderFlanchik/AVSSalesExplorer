@@ -11,6 +11,7 @@
     <Page.Resources>
         <common:CategoriesList x:Key="CategoriesList" />
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <common:NullableNumericConverter x:Key="nullableNumericConverter"/>
         <local:ByteArrayToBitmapImageConverter x:Key="byteToImageConverter"/>
         <local:EnumDescriptionConverter x:Key="enumDescriptionConverter"/>
         <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
@@ -35,17 +36,18 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
             <TextBlock Text="Товары:" Margin="5,8"/>
-            <ComboBox ItemsSource="{StaticResource CategoriesList}" Height="25" Width="70" SelectedValue="{Binding CategoryFilter}" SelectedValuePath="Key" DisplayMemberPath="Value"/>
+            <ComboBox ItemsSource="{StaticResource CategoriesList}" Height="25" Width="70" SelectedValue="{Binding CategoryFilter}" 
+                      SelectedValuePath="Key" DisplayMemberPath="Value"/>
             <TextBlock Text="Дата покупки от:" Margin="18,8,3,0"/>
-            <DatePicker x:Name="PurchaseDateFilterFrom" Margin="3,3" Height="25" />
+            <DatePicker x:Name="PurchaseDateFilterFrom" SelectedDate="{Binding DateFrom}" Margin="3,3" Height="25" />
             <TextBlock Text="до:" Margin="5, 8"/>
-            <DatePicker x:Name="PurchaseDateFilterTo" Margin="3,3" Height="25" />
+            <DatePicker x:Name="PurchaseDateFilterTo"  SelectedDate="{Binding DateTo}" Margin="3,3" Height="25" />
             <TextBlock Text="Цена, грн., от:" Margin="5, 8"/>
-            <TextBox Width="75" Height="20"/>
+            <TextBox Width="75" Height="20" Text="{Binding PriceFrom, Converter={StaticResource nullableNumericConverter }}" />
             <TextBlock Text="до:" Margin="5, 8"/>
-            <TextBox Width="75" Height="20"/>
-            <Button x:Name="ApplyFiltersBtn" Height="20" Width="70" Margin="8,0,2,0" Content="Применить" />
-            <Button x:Name="ClearFiltersBtn" Height="20" Width="70" Margin="2,0" Content="Очистить" />
+            <TextBox Width="75" Height="20" Text="{Binding PriceTo, Converter={StaticResource nullableNumericConverter }}" />
+            <Button x:Name="ApplyFiltersBtn" Height="20" Width="70" Margin="8,0,2,0" Content="Применить" Click="ApplyFiltersBtn_Click"/>
+            <Button x:Name="ClearFiltersBtn" Height="20" Width="70" Margin="2,0" Content="Очистить" Click="ClearFiltersBtn_Click" />
         </StackPanel>
         <DataGrid Grid.Row="2" Grid.Column="0" 
                   x:Name="productGrid" 

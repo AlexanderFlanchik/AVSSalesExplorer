@@ -152,7 +152,7 @@ namespace AVSSalesExplorer.Pages
             salesDialog.ShowDialog();
         }
 
-        private ItemViewModel GetRowModel(object sender)
+        private static ItemViewModel GetRowModel(object sender)
             => ((FrameworkElement)sender).DataContext as ItemViewModel;
 
         private void productGrid_Sorting(object sender, DataGridSortingEventArgs e)
@@ -188,6 +188,16 @@ namespace AVSSalesExplorer.Pages
         {
             var mainWindow = DependencyResolver.Instance.GetRequiredService<MainWindow>();
             mainWindow.Content = new LandingPage();
-        }                  
+        }
+
+        private async void ApplyFiltersBtn_Click(object sender, RoutedEventArgs e)
+        {
+            await vm.LoadData();
+        }
+
+        private void ClearFiltersBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

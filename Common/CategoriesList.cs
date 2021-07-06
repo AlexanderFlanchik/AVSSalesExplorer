@@ -2,13 +2,13 @@
 
 namespace AVSSalesExplorer.Common
 {
-    public class CategoriesList : Dictionary<int, string>
+    public class CategoriesList : Dictionary<short, string>
     {
         public CategoriesList()
         {
             Add(-1, "Все");
-            Add((int)ItemCategory.Clothes, "Вещи");
-            Add((int)ItemCategory.Bags, "Сумки");
+            Add((short)ItemCategory.Clothes, "Вещи");
+            Add((short)ItemCategory.Bags, "Сумки");
         }
     }
 }

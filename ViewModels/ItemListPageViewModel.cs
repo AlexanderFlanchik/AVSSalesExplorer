@@ -17,9 +17,13 @@ namespace AVSSalesExplorer.ViewModels
         private int _pageSize;
         private int _total;
         private int _totalPages;
-        private int _categoryFilter;
+        private short _categoryFilter;
+        private DateTime? _dateFrom;
+        private DateTime? _dateTo;
+        private decimal? _priceFrom;
+        private decimal? _priceTo;
 
-        public int[] PageSizes => new[] { 25, 50, 75, 100 };
+        public static int[] PageSizes => new[] { 25, 50, 75, 100 };
         
         public ItemListPageViewModel(IItemService itemService)
         {
@@ -100,7 +104,7 @@ namespace AVSSalesExplorer.ViewModels
             }
         }
 
-        public int CategoryFilter
+        public short CategoryFilter
         {
             get => _categoryFilter;
             set
@@ -113,9 +117,70 @@ namespace AVSSalesExplorer.ViewModels
             }
         }
 
+        public DateTime? DateFrom
+        {
+            get => _dateFrom;
+            set
+            {
+                if (value != _dateFrom)
+                {
+                    _dateFrom = value;
+                    OnPropertyChanged(nameof(DateFrom));
+                }
+            }
+        }
+        public DateTime? DateTo
+        {
+            get => _dateTo;
+            set
+            {
+                if (value != _dateTo)
+                {
+                    _dateTo = value;
+                    OnPropertyChanged(nameof(DateTo));
+                }
+            }
+        }
+
+        public decimal? PriceFrom
+        {
+            get => _priceFrom;
+            set
+            {
+                if (value != _priceFrom)
+                {
+                    _priceFrom = value;
+                    OnPropertyChanged(nameof(PriceFrom));
+                }
+            }
+        }
+
+        public decimal? PriceTo
+        {
+            get => _priceTo;
+            set
+            {
+                if (value != _priceTo)
+                {
+                    _priceTo = value;
+                    OnPropertyChanged(nameof(PriceTo));
+                }
+            }
+        }
+
         public async Task LoadData()
         {           
-            var itemsRequest = new GetItemsRequest() { PageNumber = PageNumber, PageSize = PageSize };
+            var itemsRequest = new GetItemsRequest() 
+                { 
+                    PageNumber = PageNumber, 
+                    PageSize = PageSize,
+                    CategoryFilter = CategoryFilter,
+                    DateFrom = DateFrom,
+                    DateTo = DateTo,
+                    PriceFrom = PriceFrom,
+                    PriceTo = PriceTo
+                };
+
             var itemsResponse = await _itemService.GetItems(itemsRequest);
 
             Total = itemsResponse.Total;
