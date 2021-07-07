@@ -189,6 +189,15 @@ namespace AVSSalesExplorer.ViewModels
             Items = itemsResponse.Items.ToList();                        
         }
 
+        public void ResetFilters()
+        {
+            CategoryFilter = -1;
+            DateFrom = null;
+            DateTo = null;
+            PriceFrom = null;
+            PriceTo = null;
+        }
+
         public bool IsBackButtonShown => PageNumber > 1;
         public bool IsForwardButtonShown => PageNumber < TotalPages;        
         public Task DeleteItemById(int itemId) => _itemService.DeleteItem(itemId);

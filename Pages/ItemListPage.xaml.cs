@@ -195,9 +195,16 @@ namespace AVSSalesExplorer.Pages
             await vm.LoadData();
         }
 
-        private void ClearFiltersBtn_Click(object sender, RoutedEventArgs e)
+        private async void ClearFiltersBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            vm.ResetFilters();
+            await vm.LoadData();
         }
+
+        private void Prices_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            var mainWindow = DependencyResolver.Instance.GetRequiredService<MainWindow>();
+            mainWindow.GetDecimalNumberTextBoxValidationHandler().Invoke(sender, e);
+        }        
     }
 }

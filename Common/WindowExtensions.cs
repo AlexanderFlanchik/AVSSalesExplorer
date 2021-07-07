@@ -36,6 +36,11 @@ namespace AVSSalesExplorer.Common
             };
         }
 
+        /// <summary>
+        /// Gets an input validation handler for TextBox control that allows enter only valid integer numbers.
+        /// </summary>
+        /// <param name="window"></param>
+        /// <returns></returns>
         internal static TextCompositionEventHandler GetIntNumberTextBoxValidationHandler(this Window window)
         {
             return (sender, e) => {

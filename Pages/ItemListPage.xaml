@@ -42,10 +42,10 @@
             <DatePicker x:Name="PurchaseDateFilterFrom" SelectedDate="{Binding DateFrom}" Margin="3,3" Height="25" />
             <TextBlock Text="до:" Margin="5, 8"/>
             <DatePicker x:Name="PurchaseDateFilterTo"  SelectedDate="{Binding DateTo}" Margin="3,3" Height="25" />
-            <TextBlock Text="Цена, грн., от:" Margin="5, 8"/>
-            <TextBox Width="75" Height="20" Text="{Binding PriceFrom, Converter={StaticResource nullableNumericConverter }}" />
+            <TextBlock Text="Цена, грн., от:" Margin="5, 8" />
+            <TextBox x:Name="PriceFrom" Width="75" Height="20" Text="{Binding PriceFrom, Converter={StaticResource nullableNumericConverter }}" PreviewTextInput="Prices_PreviewTextInput" />
             <TextBlock Text="до:" Margin="5, 8"/>
-            <TextBox Width="75" Height="20" Text="{Binding PriceTo, Converter={StaticResource nullableNumericConverter }}" />
+            <TextBox x:Name="PriceTo" Width="75" Height="20" Text="{Binding PriceTo, Converter={StaticResource nullableNumericConverter }}" PreviewTextInput="Prices_PreviewTextInput" />
             <Button x:Name="ApplyFiltersBtn" Height="20" Width="70" Margin="8,0,2,0" Content="Применить" Click="ApplyFiltersBtn_Click"/>
             <Button x:Name="ClearFiltersBtn" Height="20" Width="70" Margin="2,0" Content="Очистить" Click="ClearFiltersBtn_Click" />
         </StackPanel>
