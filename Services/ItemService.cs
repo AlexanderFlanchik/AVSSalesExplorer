@@ -40,6 +40,18 @@ namespace AVSSalesExplorer.Services
                 itemsQuery = itemsQuery.Where(r => r.Category == (ItemCategory)request.CategoryFilter);
             }
 
+            if (request.DateFrom.HasValue)
+            {
+                itemsQuery = itemsQuery.Where(r => r.PurchaseDate >= request.DateFrom.Value);
+            }
+
+            if (request.DateTo.HasValue)
+            {
+                var dt = request.DateTo.Value;
+                dt = new DateTime(dt.Year, dt.Month, dt.Day, 23, 59, 59);
+                itemsQuery = itemsQuery.Where(r => r.PurchaseDate <= dt);
+            }
+
             if (request.PriceFrom.HasValue)
             {
                 itemsQuery = itemsQuery.Where(r => r.Price >= request.PriceFrom.Value);
