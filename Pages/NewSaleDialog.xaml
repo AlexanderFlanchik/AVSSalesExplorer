@@ -51,7 +51,7 @@
         </StackPanel>
         <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
             <TextBlock Text="Цена, грн:" Width="60" Height="20" Margin="15,5"/>
-            <TextBox Text="{Binding Price}" Width="60" Height="20" Margin="10,5"/>
+            <TextBox Text="{Binding Price}" Width="60" Height="20" Margin="10,5" PreviewTextInput="Price_PreviewTextInput"/>
             <TextBlock Text="Введите цену продажи." Margin="10,5" Style="{StaticResource errorMessage}" Visibility="{Binding Path=PriceNotSet, Converter={StaticResource BoolToVisibilityConverter}}"/>
         </StackPanel>
         <StackPanel Grid.Row="3" Grid.Column="0">

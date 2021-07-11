@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -21,15 +22,16 @@ namespace AVSSalesExplorer.Common
                 }
 
                 var inpt = textBox.Text;
+                var decimalSeparator = Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator;
 
                 Regex regex;
-                if (inpt.Contains(".") || inpt.Contains(","))
+                if (inpt.Contains(decimalSeparator))
                 {
                     regex = new Regex(@"[^0-9]+");
                 }
                 else
                 {
-                    regex = new Regex(@"[^0-9.|,]+");
+                    regex = new Regex($@"[^0-9.|{decimalSeparator}]+");
                 }
 
                 e.Handled = regex.IsMatch(e.Text);

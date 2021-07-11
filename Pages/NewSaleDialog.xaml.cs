@@ -56,5 +56,12 @@ namespace AVSSalesExplorer.Pages
             vm.ClearValidationResults();
             DialogResult = false;
         }
+
+        private void Price_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            var mainWindow = DependencyResolver.Instance.GetRequiredService<MainWindow>();
+            mainWindow.GetDecimalNumberTextBoxValidationHandler()
+                    .Invoke(sender, e);
+        }
     }
 }
