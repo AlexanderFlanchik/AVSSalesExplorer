@@ -5,10 +5,104 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:AVSSalesExplorer.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="SalesList">
-
+      d:DesignHeight="768" d:DesignWidth="1366" Loaded="Page_Loaded">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35" />
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal">
+            <Button x:Name="GobackBtn" Content="Назад" Width="90" Height="20" Margin="5,5" Click="GobackBtn_Click"/>
+            <TextBlock Text="Период продаж от:" Margin="5,8"/>
+            <DatePicker x:Name="SaleDateFrom" SelectedDate="{Binding DateFrom}" Height="25" Width="110" Margin="5,5"/>
+            <TextBlock Text="до:" Margin="5,8"/>
+            <DatePicker x:Name="SaleDateTo" SelectedDate="{Binding DateTo}" Height="25" Width="110" Margin="5,5"/>
+            <Button x:Name="ApplyDatesFilterBtn" Content="Применить" Width="90" Height="20" Margin="5,0" Click="ApplyDatesFilterBtn_Click"/>
+        </StackPanel>
+        <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal">
+            <StackPanel.Resources>
+                <Style TargetType="TextBlock" x:Key="profitMessage">
+                    <Setter Property="Foreground" Value="Navy"/>
+                </Style>
+            </StackPanel.Resources>
+            <TextBlock Style="{StaticResource profitMessage}" Text="Прибыль за период, грн.:" Margin="5,5"/>
+            <TextBlock Style="{StaticResource profitMessage}" Text="{Binding PeriodProfit}" FontWeight="Bold" Margin="5,5"/>
+        </StackPanel>
+        <DataGrid Grid.Column="0" Grid.Row="2"
+                  x:Name="SalesListGrid"
+                  IsReadOnly="True" 
+                  AutoGenerateColumns="False"
+                  ItemsSource="{Binding Sales}"
+                  Sorting="SalesList_Sorting">
+            <DataGrid.Resources>
+                <Style x:Key="{x:Type DataGridCell}" TargetType="{x:Type DataGridCell}">
+                    <Setter Property="Background" Value="{x:Null}" />
+                    <Setter Property="BorderBrush" Value="{x:Null}" />
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{x:Null}" />
+                            <Setter Property="BorderBrush" Value="{x:Null}" />
+                            <Setter Property="Foreground" Value="Black"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="Background" Value="{x:Null}" />
+                    <Setter Property="BorderBrush" Value="{x:Null}" />
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{x:Null}" />
+                            <Setter Property="BorderBrush" Value="{x:Null}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Товар" Width="150">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding Photo}" Width="150" Height="150"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Дата продажи" Binding="{Binding SaleDate, StringFormat=dd/MM/yyyy}" Width="95">
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Размер" Binding="{Binding Size}" Width="70"/>
+                <DataGridTextColumn Header="Цена, грн." Binding="{Binding Price}" Width="100"/>
+                <DataGridTextColumn Header="Прибыль, грн." Binding="{Binding Profit}" Width="100"/>
+                <DataGridTextColumn Header="Покупатель" Binding="{Binding Customer}" Width="180"/>
+                <DataGridTextColumn Header="Адрес" Binding="{Binding Address}" Width="*"/>
+                <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}" Width="130"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Grid Grid.Column="0" Grid.Row="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="220"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="450"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal">
+                <TextBlock Text="Всего продаж за период: " Margin="5,5,3,5"/>
+                <TextBlock Text="{Binding TotalSales}" FontWeight="Bold" Margin="0,5"/>
+            </StackPanel>
+            <StackPanel Grid.Column="2" Grid.Row="0" Orientation="Horizontal">
+                <TextBlock Margin="5,5" Text="Страница: "/>
+                <TextBlock Margin="0,5" Text="{Binding PageNumber}"/>
+                <TextBlock Margin="0,5" Text="/" />
+                <TextBlock Margin="0,5" Text="{Binding TotalPages}"/>
+                <TextBlock Margin="60,5,0,0" Text="Продаж на странице:"/>
+                <ComboBox x:Name="PageSizeCB" Margin="5,5" Height="20" Width="48" SelectedValue="{Binding PageSize}" ItemsSource="{Binding PageSizes}" SelectionChanged="PageSizeCB_SelectionChanged"></ComboBox>
+                <Button x:Name="goBackBtn" Content="&#60;" Width="20" Height="20" Margin="75,5,0,5" IsEnabled="{Binding IsPageBackEnabled}" Click="pageBackBtn_Click"/>
+                <Button x:Name="goForwardBtn" Content="&#62;" Width="20" Height="20" Margin="3,5" IsEnabled="{Binding IsPageForwardEnabled}" Click="pageForwardBtn_Click"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Page>

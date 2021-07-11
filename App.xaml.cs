@@ -21,6 +21,7 @@ namespace AVSSalesExplorer
                 services.AddDbContext<ItemDbContext>();
                 services.AddTransient<IItemService, ItemService>();
                 services.AddTransient<IItemSaleService, ItemSaleService>();
+                services.AddTransient<ISalesListDataService, SalesListDataService>();
 
                 services.AddSingleton<MainWindow>();
                 services.AddSingleton<ItemListPageViewModel>();                
@@ -28,6 +29,7 @@ namespace AVSSalesExplorer
                 services.AddSingleton<NewItemSizeViewModel>();
                 services.AddSingleton<NewSaleViewModel>();
                 services.AddSingleton<ItemSalesViewModel>();
+                services.AddSingleton<SalesListViewModel>();
             }).Build();
 
             DependencyResolver.Instance.Init(host);

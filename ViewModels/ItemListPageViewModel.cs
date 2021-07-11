@@ -185,7 +185,7 @@ namespace AVSSalesExplorer.ViewModels
 
             Total = itemsResponse.Total;
             TotalPages = (int)Math.Ceiling((decimal)Total / PageSize);
-
+            
             Items = itemsResponse.Items.ToList();                        
         }
 
