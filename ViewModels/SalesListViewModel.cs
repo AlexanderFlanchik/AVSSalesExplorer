@@ -1,10 +1,8 @@
-﻿using AVSSalesExplorer.DTOs;
-using AVSSalesExplorer.Services;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using AVSSalesExplorer.DTOs;
+using AVSSalesExplorer.Services;
 
 namespace AVSSalesExplorer.ViewModels
 {
@@ -37,6 +35,8 @@ namespace AVSSalesExplorer.ViewModels
             {
                 _sales = value;
                 OnPropertyChanged(nameof(Sales));
+                OnPropertyChanged(nameof(IsSalesGridShown));
+                OnPropertyChanged(nameof(NoSalesMessageShown));
             }
         }
 
@@ -131,6 +131,8 @@ namespace AVSSalesExplorer.ViewModels
             }
         }
 
+        public bool IsSalesGridShown => Sales is not null && Sales.Any();
+        public bool NoSalesMessageShown => !IsSalesGridShown;
         public bool IsPageBackEnabled => PageNumber > 1;
         public bool IsPageForwardEnabled => PageNumber < TotalPages;
 

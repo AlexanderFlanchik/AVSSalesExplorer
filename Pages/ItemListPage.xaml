@@ -173,8 +173,15 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" Visibility="{Binding NoItemsMessagesVisible, Converter={StaticResource BoolToVisibilityConverter}}">
-            <TextBlock Foreground="Navy" FontWeight="Bold" FontSize="12pt" Text="Список товаров пуст. Нажмите на &#34;Новый товар&#34;, чтобы начать добавлять товары в базу."/>
+        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Vertical" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center" 
+                    Visibility="{Binding NoItemsMessagesVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+            <TextBlock Foreground="Navy" FontWeight="Bold" FontSize="12pt" Margin="90,0,90,0" TextWrapping="WrapWithOverflow">
+                <Run Text="Товары не найдены. Если Вы не добавляли товары ранее, добавьте их, нажав на  на &#34;Новый товар&#34;."/>
+                <LineBreak/>
+                <Run Text="Если выбраны фильтры выше, нажмите &#34;Очистить&#34; для их отмены."/>
+            </TextBlock>
         </StackPanel>
         <Grid Grid.Row="3" Grid.Column="0" Visibility="{Binding ItemsGridShown, Converter={StaticResource BoolToVisibilityConverter}}">
             <Grid.RowDefinitions>
