@@ -17,6 +17,7 @@ namespace AVSSalesExplorer.Pages
         private readonly EditItemViewModel editVm;
         private readonly NewSaleViewModel newSaleVm;
         private readonly ItemSalesViewModel salesDialogVm;
+        private readonly MainWindow mainWindow = DependencyResolver.Instance.GetRequiredService<MainWindow>();
 
         public ItemListPage()
         {
@@ -55,6 +56,8 @@ namespace AVSSalesExplorer.Pages
             editVm.SetItemData(updateItemRequest);
 
             EditItemDialog editItemDialog = new();
+            editItemDialog.Owner = mainWindow;
+
             if (editItemDialog.ShowDialog() == true)
             {
                 rowVm.Description = editVm.Description;
@@ -86,6 +89,7 @@ namespace AVSSalesExplorer.Pages
         {
             editVm.NewItem();
             var editItemDialog = new EditItemDialog();
+            editItemDialog.Owner = mainWindow;
 
             var result = editItemDialog.ShowDialog();
             if (result.HasValue && result.Value)
@@ -118,6 +122,8 @@ namespace AVSSalesExplorer.Pages
             }
 
             var newSaleDlg = new NewSaleDialog();
+            newSaleDlg.Owner = mainWindow;
+
             if (newSaleDlg.ShowDialog() == true)
             {
                 // Update sales value and size amount              
@@ -149,6 +155,8 @@ namespace AVSSalesExplorer.Pages
             salesDialogVm.ItemId = rowVm.Id;
 
             var salesDialog = new ItemSalesDialog();
+            salesDialog.Owner = mainWindow;
+
             salesDialog.ShowDialog();
         }
 
@@ -185,8 +193,7 @@ namespace AVSSalesExplorer.Pages
         }
 
         private void GobackBtn_Click(object sender, RoutedEventArgs e)
-        {
-            var mainWindow = DependencyResolver.Instance.GetRequiredService<MainWindow>();
+        {            
             mainWindow.Content = new LandingPage();
         }
 
@@ -203,7 +210,6 @@ namespace AVSSalesExplorer.Pages
 
         private void Prices_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-            var mainWindow = DependencyResolver.Instance.GetRequiredService<MainWindow>();
             mainWindow.GetDecimalNumberTextBoxValidationHandler().Invoke(sender, e);
         }        
     }
